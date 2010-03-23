@@ -64,22 +64,25 @@ Tests.prototype.DeviceTests = function() {
         value = bondi.devicestatus.getPropertyValue({property:"batteryTechnology"});
 		ok(typeof value != 'undefined' && value != null, "batteryTechnology should not be null.") 
 	});
-    var watchID;
-    test("watchPropertyChange success callback should be called and clearPropertyChange should stop it", function() {
-		expect(4);
+    var watchID = 0;
+    test("watchPropertyChange success callback should be called", function() {
+		expect(2);
 		stop(tests.TEST_TIMEOUT);
 		var win = function(ref,value) {
 			ok(ref != null, "PropertyRef object returned in watchPropertyChange success callback should not be null.");
-			ok(value != null, "new Value object returned in watchPropertyChange success callback should not be null.");
+			ok(value != null, "new Value object returned in watchPropertyChange success callback should not be null.");			
 			start();
-            try {
-               bondi.devicestatus.clearPropertyChange(watchID);
-            } catch(error) {
-               ok( true, "bondi.devicestatus.clearPropertyChange should be able to stop property changes.");
-            }
-            ok( true, "bondi.devicestatus.clearPropertyChange should be able to stop property changes.");
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:1000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
     });
+	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {
+		 expect(1);
+		 try {
+			bondi.devicestatus.clearPropertyChange(watchID);
+		 } catch(error) {
+			ok( true, "bondi.devicestatus.clearPropertyChange should be able to stop property changes.");
+		 }
+		 ok( true, "bondi.devicestatus.clearPropertyChange should be able to stop property changes.");
+	});
 };

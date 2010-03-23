@@ -33,22 +33,25 @@ Tests.prototype.GeoLocationTests = function() {
 		bondi.geolocation.getCurrentPosition(win, fail);
 	});
     var watchID;
-    test("watchPosition success callback should be called and clearWatch should stop it", function() {
-		expect(3);
+    test("watchPosition success callback should be called", function() {
+		expect(2);
 		stop(tests.TEST_TIMEOUT);
 		var win = function(p) {
 			ok(p.coords != null, "Position object returned in watchPosition success callback has a 'coords' property.");
 			ok(p.timestamp != null, "Position object returned in watchPosition success callback has a 'timestamp' property.");
 			start();
-            try {
-                bondi.geolocation.clearWatch(watchID);
-            } catch(error) {
-               ok( false, "bondi.geolocation.clearWatch should be able to stop location updates.");
-            }
-            ok( true, "bondi.geolocation.clearWatch should be able to stop location updates.");
 		};
 		var fail = function() { start(); };
 		watchID = bondi.geolocation.watchPosition(win, fail);
+	});
+	test("clearWatch should stop watchPosition success callback",function () {
+		 expect(1);
+		 try {
+			bondi.geolocation.clearWatch(watchID);
+		 } catch(error) {
+			ok( false, "bondi.geolocation.clearWatch should be able to stop location updates.");
+		 }
+		 ok( true, "bondi.geolocation.clearWatch should be able to stop location updates.");
 	});
 	module('Geolocation model');
 	test("should be able to define a Position object with coords and timestamp properties", function() {

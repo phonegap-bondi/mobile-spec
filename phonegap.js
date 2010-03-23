@@ -1480,10 +1480,8 @@ Network.prototype.updateReachability = function(reachability) {
 PhoneGap.addConstructor(function() {
     if (typeof navigator.network == "undefined") navigator.network = new Network();
 });
-//TODO: P2 characters like '#' in parameters cause problems with HTTP URL (see PhoneGapResponse) - parameters could be sent in HTTP body
 //Helper methods
 //XHR
-//example:  http://localhost:8080/<className>/<methodName>;arg1;arg2?option1=something&option2=other
 var HTTP = {
 	get: function (url,headerValue) {
 		var xhr = new XMLHttpRequest();
@@ -1605,6 +1603,8 @@ function BondiCamera() {
 BondiCamera.prototype.takePicture = function(successCallback, errorCallback, options) {
 	bondi.camera.successCallback = successCallback;
 	bondi.camera.errorCallback = errorCallback;
+	if (options == undefined)
+		options = {};
 	HTTP.get('http://localhost:8080/BONDICamera/takePicture',JSON.stringify(options));
     return new PendingOperation();
 }

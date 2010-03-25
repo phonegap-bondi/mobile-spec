@@ -6,7 +6,7 @@ Tests.prototype.BondiTests = function() {
 	});
 	test("should contain a requestFeature function", function() {
 		expect(2);
-		ok(typeof bondi.requestFeature != 'undefined' && bondi.camera.getCameras != null, "bondi.requestFeature should not be null.");
+		ok(typeof bondi.requestFeature != 'undefined' && bondi.requestFeature != null, "bondi.requestFeature should not be null.");
 		ok(typeof bondi.requestFeature == 'function', "bondi.requestFeature should be a function.");
 	});
 };

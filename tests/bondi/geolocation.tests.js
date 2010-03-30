@@ -70,8 +70,14 @@ Tests.prototype.GeoLocationTests = function() {
 		ok(typeof coords.longitude != 'undefined' && coords.longitude != null, "new Coordinates() should include a 'longitude' property.");
 		ok(typeof coords.accuracy != 'undefined' && coords.accuracy != null, "new Coordinates() should include a 'accuracy' property.");
 		ok(typeof coords.altitude != 'undefined' && coords.altitude != null, "new Coordinates() should include a 'altitude' property.");
-		ok(typeof coords.altitudeAccuracy != 'undefined' && coords.altitudeAccuracy != null, "new Coordinates() should include a 'altitudeAccuracy' property.");
+		ok(typeof coords.altitudeAccuracy != 'undefined', "new Coordinates() should include a 'altitudeAccuracy' property.");
 		ok(typeof coords.heading != 'undefined' && coords.heading != null, "new Coordinates() should include a 'heading' property.");
 		ok(typeof coords.speed != 'undefined' && coords.speed != null, "new Coordinates() should include a 'speed' property.");
+	});
+	test("checking PositionError values", function() {
+		expect(3);
+		equals( 1, PositionError.PERMISSION_DENIED, "We expect PERMISSION_DENIED to be 1" );
+		equals( 2, PositionError.POSITION_UNAVAILABLE, "We expect POSITION_UNAVAILABLE to be 2" );
+		equals( 3, PositionError.TIMEOUT, "We expect TIMEOUT to be 3" );
 	});
 };

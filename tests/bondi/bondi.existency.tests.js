@@ -1,4 +1,4 @@
-Tests.prototype.BondiTests = function() {	
+Tests.prototype.BondiExistencyTests = function() {	
 	module('Bondi (bondi)');
 	test("should exist", function() {
   		expect(1);

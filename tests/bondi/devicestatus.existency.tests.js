@@ -1,4 +1,4 @@
-Tests.prototype.DeviceTests = function() {
+Tests.prototype.DeviceExistencyTests = function() {
 	module('DeviceStatusManager (bondi.devicestatus)');
 	test("should exist", function() {
   		expect(1);

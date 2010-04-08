@@ -10,10 +10,10 @@ Tests.prototype.CameraTests = function() {
 		ok(typeof bondi.camera.getCameras == 'function', "bondi.camera.getCameras should be a function.");
 	});
     module('Camera (bondi.camera)');
-    test("should be able to instantiate a Camera object with properties", function () {
-        expect(25);
+    test("should be able to instantiate a Camera object with properties", function () {        
         stop(tests.TEST_TIMEOUT);
         var win = function(cameras) {
+			expect(25);
             var camera = cameras[0];
             ok(camera != null, "new Camera object should not be null.");
             ok(typeof camera == 'object', "new Camera object should be of type 'object'.");
@@ -39,8 +39,8 @@ Tests.prototype.CameraTests = function() {
             ok(typeof camera.getSupportedFeatures == 'function', "getSupportedFeatures should be a function.");
             ok(typeof camera.setFeature == 'function', "setFeature should be a function.");
             ok(typeof camera.requestLiveVideo == 'function', "requestLiveVideo should be a function.");
-            ok(typeof camera.startVideo == 'function', "startVideo should be a function.");
-            ok(typeof camera.stopVideo == 'function', "stopVideo should be a function.");
+            ok(typeof camera.beginRecording == 'function', "beginRecording should be a function.");
+            ok(typeof camera.endRecording == 'function', "endRecording should be a function.");
             
             start();
         };

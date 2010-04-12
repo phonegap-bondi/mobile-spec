@@ -30,7 +30,8 @@ Tests.prototype.GeoLocationTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		bondi.geolocation.getCurrentPosition(win, fail);
+		var options = {}; options.timeout = 20000; options.maximumAge = 60000;
+		bondi.geolocation.getCurrentPosition(win, fail, options);
 	});
     var watchID;
     test("watchPosition success callback should be called", function() {

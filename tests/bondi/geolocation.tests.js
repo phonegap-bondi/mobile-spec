@@ -7,11 +7,9 @@ Tests.prototype.GeolocationTests = function() {
 			ok( true, "successCallback was called");
 			start();
 		 };
-		 var fail = function() {
-			ok( true, "errorCallback was called");
-			start(); 
-		 };
-		 bondi.geolocation.getCurrentPosition(win, fail,{timeout:10000, maximumAge:60000, enableHighAccuracy:false});
+		var fail = function() { start(); };
+		var options = {}; options.timeout = 20000; options.maximumAge = 60000;
+		bondi.geolocation.getCurrentPosition(win, fail, options);
 	});
 	module('GEO_ex_watchPosition');
 	var id;

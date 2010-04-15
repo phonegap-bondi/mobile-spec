@@ -1,4 +1,4 @@
-Tests.prototype.CameraTests = function() {	
+Tests.prototype.CameraExistencyTests = function() {	
 	module('CameraManager (bondi.camera)');
 	test("should exist", function() {
   		expect(1);

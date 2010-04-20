@@ -1,4 +1,4 @@
-Tests.prototype.FilesystemTests = function() {	
+Tests.prototype.FilesystemExistencyTests = function() {	
 	module('FileSystemManager (bondi.filesystem)');
 	test("should exist", function() {
 		 expect(1);

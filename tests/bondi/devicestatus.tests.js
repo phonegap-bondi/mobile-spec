@@ -31,11 +31,11 @@ Tests.prototype.DeviceTests = function() {
 		try
 		{
 		  bondi.devicestatus.setDefaultVocabulary("bonditest");
-		  fail(true,"One may not set a non-existent vocabulary (INVALID_ARGUMENT_ERROR)");
+		  fail(true,"One may not set a non-existent vocabulary (NOT_FOUND_ERROR)");
 		}
 		catch(myError)
 		{
-		  ok(myError.code==10002,"One may not set a non-existent vocabulary (INVALID_ARGUMENT_ERROR)");
+		  ok(myError.code==10002,"One may not set a non-existent vocabulary (NOT_FOUND_ERROR)");
 		}	
 	
 		try
@@ -45,7 +45,7 @@ Tests.prototype.DeviceTests = function() {
 		}
 		catch(myError)
 		{
-		  ok(myError.code==10002,"One may not set a null vocabulary (INVALID_ARGUMENT_ERROR)");
+		  ok(myError.code==10001,"One may not set a null vocabulary (INVALID_ARGUMENT_ERROR)");
 		}	
 	
 		try
@@ -55,7 +55,7 @@ Tests.prototype.DeviceTests = function() {
 		}
 		catch(myError)
 		{
-		  ok(myError.code==10002,'One may not set an empty string as vocabulary (INVALID_ARGUMENT_ERROR)');
+		  ok(myError.code==10001,'One may not set an empty string as vocabulary (INVALID_ARGUMENT_ERROR)');
 		}	
 	
 		try
@@ -66,7 +66,7 @@ Tests.prototype.DeviceTests = function() {
 		}
 		catch(myError)
 		{
-		  ok(myError.code==10002,'One may not set an undefined variable as vocabulary (INVALID_ARGUMENT_ERROR)');
+		  ok(myError.code==10001,'One may not set an undefined variable as vocabulary (INVALID_ARGUMENT_ERROR)');
 		}
 	});
 	

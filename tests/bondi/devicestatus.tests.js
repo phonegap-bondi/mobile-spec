@@ -84,7 +84,8 @@ Tests.prototype.DeviceTests = function() {
         ok(typeof bondi.devicestatus.getComponents == 'function', "bondi.devicestatus.getComponents should be a function.");
         var value = bondi.devicestatus.listAspects();
 		var components = bondi.devicestatus.getComponents({aspect:value[0]});
-		ok(typeof components != 'undefined' && components.length>0, "an aspect must always have at least one component");
+		//Changed from length > 0 to length >= null because there are aspects with zero components as well
+		ok(typeof components != 'undefined' && components.length>=0, "an aspect must always have at least one component");
 	});
     
     
@@ -120,26 +121,28 @@ Tests.prototype.DeviceTests = function() {
         ok(typeof bondi.devicestatus.watchPropertyChange == 'function', "bondi.devicestatus.watchPropertyChange should be a function.");
 		var numwatchcallleft = 3;
 		stop(tests.TEST_TIMEOUT); 
-		var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"},															  
-											  function onPropertyChange(ref, value) {
-											  numwatchcallleft--;
-											  if (numwatchcallleft==0){
-											  var exception = false;
-											  try {
-											  bondi.devicestatus.clearPropertyChange(batteryChangeHandler);
-											  } catch (e) { exception = true; fail(true,"clearing property change watch failed");}
-											  if (!exception)
-											  ok(numwatchcallleft==0,"clearing property change watch succeeded");
-											  start();
-											  }
-												}
-												 , {minTimeout:1000,callCallbackOnRegister:true});		 
+		var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"},
+				function onPropertyChange(ref, value) {
+					  numwatchcallleft--;
+					  if (numwatchcallleft==0){
+						  var exception = false;
+						  try {
+							  bondi.devicestatus.clearPropertyChange(batteryChangeHandler);
+						  } catch (e) { 
+							  exception = true; fail(true,"clearing property change watch failed");
+						  }
+						  if (!exception)
+							  ok(numwatchcallleft==0,"clearing property change watch succeeded");
+						  start();
+					  }
+				}, 
+				{maxTimeout:1000,callCallbackOnRegister:true});	
 		var exception = false;
 		try
 		{
 			var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevel"}, 
 	                null, {
-	                        minTimeout:1000,
+	                        maxTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
@@ -159,7 +162,7 @@ Tests.prototype.DeviceTests = function() {
 		 {
 		 var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevels"}, 
 					function onPropertyChange(ref, value) {}, {
-	                        minTimeout:1000,
+	                        maxTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
@@ -207,7 +210,7 @@ Tests.prototype.DeviceTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {maxTimeout:5000});
     });
     
 	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {

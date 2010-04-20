@@ -1,4 +1,5 @@
 Tests.prototype.Messaging2Tests = function() {	
+	
 	test("should exist", function() {
   		expect(1);
   		ok(bondi != null, "bondi should not be null.");
@@ -43,6 +44,7 @@ Tests.prototype.Messaging2Tests = function() {
 		stop(tests.TEST_TIMEOUT * 2);
 		var successCallback = function(result) {
 			ok(result == "SMS_SENT_RESULT_OK", "result should be SMS_SENT_RESULT_OK");
+			start();
 		};
 		var errorCallback = function(response) {
 			ok(false, "Sending sms failed with error " + response.name + " because of " + response.message);
@@ -55,7 +57,7 @@ Tests.prototype.Messaging2Tests = function() {
 	// test description: MESS_ex_subscribeToSMSunsubscribeFromSMS
 	test("should contain a subscribeToSMS function", function() {
 		expect(4);
-		stop(tests.TEST_TIMEOUT * 25);
+		stop(tests.TEST_TIMEOUT * 2);
 		var listenerID = -1;
 		
 		var listenerSuccessCallback = function(id){
@@ -64,14 +66,14 @@ Tests.prototype.Messaging2Tests = function() {
 				bondi.messaging.sendSMS(successCallback, errorCallback, sms, false);
 			}
 		var successCallback = function(response) {
-		};
+			};
 		var errorCallback = function(response) {
-		};
+			};
 		var mysmslistener = function(reSMS) {
-			alert("RECEIVED SMS!!! " + reSMS.body);
-			var testString = "Should not been received";
-			if (reSMS.body != testString){
-				ok(reSMS.body == "Hello world", "received sms should contain the same text as we send");
+			var testString = "Should not been received 2";
+			if (!smsReceived){
+				ok(typeof reSMS.body != 'undefined', "received sms should contain a text");
+				smsReceived = true;
 				var exceptionAtUnsubscribe = false;
 				try {
 					bondi.messaging.unsubscribeFromSMS(listenerID);
@@ -84,12 +86,13 @@ Tests.prototype.Messaging2Tests = function() {
 			} else {
 				ok(reSMS == null, "Second sms should not be received anymore because of our unsubscription");
 			}
+			start();
 		};
-
+		
+		var smsReceived = false;
 		var sms = bondi.messaging.createSMS({to:recipients,body:"Hello world"});
 		ok(typeof sms != 'undefined' && sms != null, "created sms should not be null.");
 		bondi.messaging.subscribeToSMS(listenerSuccessCallback,errorCallback,mysmslistener,{from:telephoneNumber},true);
-		start();
 	});
 	
 	// test description: MESS_para_createSMS.doc
@@ -109,6 +112,7 @@ Tests.prototype.Messaging2Tests = function() {
 		try {
 			var errorCallback = function(e) {
 				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+//				start(); 
 				};
 			bondi.messaging.sendSMS(null, errorCallback, sms, false); 
 		} catch (e) {
@@ -122,7 +126,8 @@ Tests.prototype.Messaging2Tests = function() {
 		var sms = bondi.messaging.createSMS({body:"Just arrived",to:["+491711234567"]});
 		try {
 			var successCallback = function(key, value) {
-			};
+//				start();
+				};
 			bondi.messaging.sendSMS(successCallback, null, sms, false); 
 		} catch (e) {
 			ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
@@ -134,10 +139,12 @@ Tests.prototype.Messaging2Tests = function() {
 		expect(1);
 		try {
 			var successCallback = function(key, value) {
-			};
+//				start(); 
+				};
 			var errorCallback = function(e) {
 				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
-			};
+//				start();
+				};
 			bondi.messaging.sendSMS(successCallback, errorCallback, null, false); 
 		} catch (e) {
 			ok(e == null, "all errors should have been gone to the errorcallback");
@@ -150,10 +157,12 @@ Tests.prototype.Messaging2Tests = function() {
 		var sms = bondi.messaging.createSMS({body:"Just arrived",to:["+491711234567"]});
 		try {
 			var successCallback = function(key, value) {
-			};
+//				start();
+				};
 			var errorCallback = function(e) {
 				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
-			};
+//				start(); 
+				};
 			bondi.messaging.sendSMS(successCallback, errorCallback, sms, null); 
 		} catch (e) {
 			ok(e == null, "all errors should have been gone to the errorcallback");
@@ -165,9 +174,8 @@ Tests.prototype.Messaging2Tests = function() {
 		expect(5);
 		var sms = bondi.messaging.createSMS({to:recipients,body:"Hello world"});
 		var successCallback = function(response) {
-		};
+			};
 		var errorCallback = function(error) {
-//			alert("error! " + " name: " + error.name + " code: " + error.code + " message: " + error.message)
 			ok(error.name == error.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 			};
 		var smslistener = function(text) {

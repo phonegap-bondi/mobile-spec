@@ -69,7 +69,6 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
 			 expect(1);
-			 //FILE_imp_WRITEtoFILE	
 			 var noexception = true;
 			 var fswritetest = null;
 			 try{
@@ -174,53 +173,164 @@ Tests.prototype.FilesystemTests = function() {
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
 	
-	module('FILE_imp_copyTo_1');
-	test("Files should be copied correctly", function() {		 
-		 var imageLocation = null, documentsLocation = null;
+	module('FILE_imp_WRITEtoFILE');
+	test("Execution of a test cycle (create,open,write,close)", function() {
 		 stop(tests.TEST_TIMEOUT);
-		 var win = function(location) {
-			expect(5);		  		 
-			if (!imageLocation){
-				imageLocation = location;
-			}
-			else if (!documentsLocation){
-				documentsLocation = location;
-		 
-				 var fswritetest = imageLocation.resolve("fswritetest");
-				 ok(fswritetest != null, "fswritetest should not be null.");				
-				 stop(tests.TEST_TIMEOUT);
-				 var copySuccess =  function(copiedFile) { 
-					 ok(true, "Copying fswritetest was successful");
-					 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
-					 var correctPath = documentsLocation.absolutePath+"/fswritetest";
-					 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
-					 
-					 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
-					 start();
-				 }
-				 var copyFailure =  function(error) { 
-					 fail(true, "Copying fswritetest was unsuccessful");
-					 start();
-				 }
-				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); 
-			}	
+		 var win = function(imageLocation) {
+		 expect(1);
+		 var noexception = true;
+		 var fswritetest = null;
+		 try{
+		 try {
+		 fswritetest = imageLocation.createFile("fswritetest");
+		 }
+		 catch(e){
+		 fswritetest = imageLocation.resolve("fswritetest");
+		 }
+		 var fs = fswritetest.open("w","UTF-8");				 	 
+		 fs.write("FSTestwrite");
+		 fs.writeBytes([0,1,2,3,4,5,6,7,8,9]);
+		 fs.writeBase64("FSTestwriteBase64");
+		 fs.close();
+		 } catch (e){
+		 noexception = false;
+		 }
+		 ok(noexception, "test cycle should throw no exception");
+		 start();
 		 }
 		 var fail = function() {
-			expect(1);
-			ok( false, "successCallback was expected");
-			start(); 
+		 expect(1);
+		 ok( false, "successCallback was expected of resolve");
+		 start(); 
+		 };
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 });
+         
+module('FILE_imp_copyTo_1');
+	test("Files should be copied correctly", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var imageLocation = null, documentsLocation = null;		 
+		 var win = function(location) {
+		 expect(5);		  		 
+		 if (!imageLocation){
+			imageLocation = location;
+		 }
+		 else if (!documentsLocation){
+			 documentsLocation = location;
+			 
+			 var fswritetest = imageLocation.resolve("fswritetest");
+			 ok(fswritetest != null, "fswritetest should not be null.");				
+			 var copySuccess =  function(copiedFile) {
+				 ok(true, "Copying fswritetest was successful");
+				 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
+				 var correctPath = documentsLocation.absolutePath+"/fswritetest";
+				 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
+				 
+				 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
+				 start();
+			 }
+			 var copyFailure =  function(error) { 
+				 fail(true, "Copying fswritetest was unsuccessful");
+				 start();
+			 }
+			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); 
+			 }	
+		 }
+		 var fail = function() {
+			 expect(1);
+			 ok( false, "successCallback was expected");
+			 start(); 
 		 };		 
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
-
 		 
-	});	
+		 
+		 });	
 	module('FILE_imp_copyTo_2');
-	test("Files should be copied correctly", function() {		 
-		 var imageLocation = null, documentsLocation = null;
+	test("Files should be copied correctly", function() {
 		 stop(tests.TEST_TIMEOUT);
+		 var imageLocation = null, documentsLocation = null;		 
 		 var win = function(location) {
-			 expect(8);		  		 
+		 expect(8);		  		 
+		 if (!imageLocation)
+		 imageLocation = location;
+		 else if (!documentsLocation){
+		 documentsLocation = location;
+		 
+		 var fswritetest = imageLocation.resolve("fswritetest");
+		 ok(fswritetest != null, "fswritetest should not be null.");
+		 var counter = 0;
+		 var copySuccess =  function(copiedFile) {
+		 counter++;
+		 ok(true, "Copying fswritetest was successful");
+		 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
+		 var correctPath = documentsLocation.absolutePath+"/fswritetest";
+		 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
+		 
+		 if (counter == 2){
+		 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
+		 start();
+		 }
+		 }
+		 var copyFailure =  function(error) { 
+		 fail(true, "Copying fswritetest was unsuccessful");
+		 start();
+		 }
+		 
+		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
+		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);			 
+		 }
+		 
+		 }
+		 var fail = function() {
+		 expect(1);
+		 ok( false, "successCallback was expected");
+		 start(); 
+		 };
+		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 });
+	module('FILE_imp_copyTo_3');
+	test("Copying files with no file name should throw an exception", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 expect(1);	
+		 var imageLocation = null, documentsLocation = null;
+		 var win = function(location) {			 	  		 
+			 if (!imageLocation)
+				imageLocation = location;
+			 else if (!documentsLocation){
+				documentsLocation = location;			 
+				var fswritetest = imageLocation.resolve("fswritetest");
+				var copySuccess =  function(copiedFile) {
+					 fail(true, "Should throw an exception");
+					 start();
+				}
+				var copyFailure =  function(error) { 
+				if (error.code == 10004)
+					 ok(true, "Correct exception was thrown");
+				else
+					 fail(true, "Wrong exception was thrown");
+				start();
+				}				
+				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath,true);		 
+			}
+		 }
+		 var fail = function() {
+			 ok( false, "successCallback was expected");
+			 start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 });
+
+
+	module('FILE_imp_copyTo_4');
+	test("Overwriting files with overwrite=no should throw an exception", function() {		 
+		 stop(tests.TEST_TIMEOUT);
+		 expect(1);	
+		 var imageLocation = null, documentsLocation = null;
+		 var win = function(location) {			 	  		 
 			 if (!imageLocation)
 				imageLocation = location;
 			 else if (!documentsLocation)
@@ -229,39 +339,70 @@ Tests.prototype.FilesystemTests = function() {
 			 if (imageLocation && documentsLocation){
 			 
 				 var fswritetest = imageLocation.resolve("fswritetest");
-				 ok(fswritetest != null, "fswritetest should not be null.");
-				 var counter = 0;
-				stop(tests.TEST_TIMEOUT); 
-				var copySuccess =  function(copiedFile) {
-					 counter++;
-					 ok(true, "Copying fswritetest was successful");
-					 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
-					 var correctPath = documentsLocation.absolutePath+"/fswritetest";
-					 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
-					 
-					 if (counter == 2)
-						 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
+				 var copySuccess =  function(copiedFile) {	
 					 start();
 				 }
-				var copyFailure =  function(error) { 
-					fail(true, "Copying fswritetest was unsuccessful");
+				 var copyFailure =  function(error) { 
+					if (error.code == 10004)
+						ok(true, "Correct exception was thrown");
+					else
+						fail(true, "Wrong exception was thrown");
 					start();
 				}
-				
 				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
-				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);
+				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
 			 
 			}
 		 
 		 }
 		 var fail = function() {
-			 expect(1);
 			 ok( false, "successCallback was expected");
 			 start(); 
-		 };
-		 
+		 };         
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 });
+	module('FILE_imp_copyTo_5');
+	test("Copying files with invalid characters should throw an exception", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 expect(1)
+		 var imageLocation = null, documentsLocation = null;
+		 var win = function(location) {
+				  		 
+			 if (!imageLocation)
+				imageLocation = location;
+			 else if (!documentsLocation)
+				documentsLocation = location;
+			 
+			 if (imageLocation && documentsLocation){
+				var fswritetest = imageLocation.resolve("fswritetest");
+				var copySuccess =  function(copiedFile) {
+					 fail(true, "Should not be successful");
+					 start();
+				 }
+				 var copyFailure =  function(error) { 
+					 if (error.code == 10004)
+						ok(true, "Correct exception was thrown");
+					 else
+						fail(true, "Wrong exception was thrown");
+					 start();
+				 }
+				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest#",true);		//TODO: which invalid characters 
+			}
+		 }
+		 var fail = function() {
+			 ok( false, "successCallback was expected");
+			 start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 });
+
+	
+	module('FILE_imp_copyTo_6');
+	test("Copying from SDCard", function() {
+		 expect(1)
+        //TODO:FILE_imp_copyTo_6
 		 });
 	module('FILE_imp_createDirectoryDeleteDirectory_1');
 	test("Creating and Deleting directories (non-recursive)", function() {
@@ -336,7 +477,75 @@ Tests.prototype.FilesystemTests = function() {
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
-	module('FILE_imp_getDefaultLocation')
+	module('FILE_imp_createDirectoryDeleteDirectory_3');
+	test("Creating and Deleting directories (file deletion)", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(imageLocation) {
+			 expect(1);
+			var fstestfile = null;
+	
+			 try{
+				fstestfile = imageLocation.createFile("fstest.txt");
+			 } catch (e){
+				fstestfile = imageLocation.resolve("fstest.txt");
+			 }
+			 var w = function(f) {
+
+					fail(true, "file was successfully deleted but should not");
+					start();
+			 };
+			 var f = function(error) {
+					if (error.code == 10004)
+						ok(true, "Correct exception was thrown");
+					else
+						fail(true, "Wrong exception was thrown");
+					start();
+			};
+			fstestfile.deleteDirectory(w,f,false)
+
+		 }
+		 var fail = function() {
+			 expect(1);
+			 ok( false, "successCallback was expected of resolve");
+			 start(); 
+		 };
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 });
+    module('FILE_imp_createDirectoryDeleteDirectory_4');
+	test("Creating and Deleting directories (file deletion)", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(imageLocation) {
+			 expect(1);
+			var fstestfile = null;
+	
+			 try{
+				fstestfile = imageLocation.createFile("fstest.txt");
+			 } catch (e){
+				fstestfile = imageLocation.resolve("fstest.txt");
+			 }
+
+			 var w = function(f) {
+					fail(true, "file was successfully deleted but should not");
+					start();
+			 };
+			 var f = function(error) {
+					if (error.code == 10004)
+						ok(true, "Correct exception was thrown");
+					else
+						fail(true, "Wrong exception was thrown");
+					start(); 
+			};
+			fstestfile.deleteDirectory(w,f,true)
+
+		 }
+		 var fail = function() {
+			 expect(1);
+			 ok( false, "successCallback was expected of resolve");
+			 start(); 
+		 };
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 });
+    module('FILE_imp_getDefaultLocation')
 	test("FileSystemManager.getDefaultLocation should be implemented correctly", function() {
          expect(9);
 		 try{
@@ -405,7 +614,7 @@ Tests.prototype.FilesystemTests = function() {
 		 }
         
      });
-	module('FILE_imp_moveTo_1');
+		module('FILE_imp_moveTo_1');
 	test("Files should be moved correctly", function() {		 
 		 var imageLocation = null, documentsLocation = null;
 		 stop(tests.TEST_TIMEOUT);
@@ -452,7 +661,199 @@ Tests.prototype.FilesystemTests = function() {
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 
 		 });
-	module('FILE_imp_READfromFILE');
+	module('FILE_imp_moveTo_2'); 
+	test("Files should be moved correctly", function() {		 
+		 var imageLocation = null, documentsLocation = null;
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(location) {
+			expect(6);		  		 
+			if (!imageLocation){
+				imageLocation = location;
+			}
+			else if (!documentsLocation){
+				documentsLocation = location;
+		 
+				 var fswritetest = imageLocation.resolve("fswritetest");
+				 ok(fswritetest != null, "fswritetest should not be null.");				
+				 var copySuccess =  function(copiedFile) { 
+					 ok(true, "Copying fswritetest was successful");
+					 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
+                     
+                     var moveSuccess =  function(movedFile) { 
+                         ok(true, "Moving movedFile  was successful");
+						 var movedFile = documentsLocation.resolve("fswritetest");		 
+						 
+						 var moveSuccess =  function(movedFile) { 
+							 ok(true, "Moving movedFile back was successful");
+							 ok(typeof movedFile == 'object', "movedFile should be of type 'object'.");
+							 start();
+						 }
+						 var moveFailure =  function(error) { 
+							 fail(true, "Moving movedFile back was unsuccessful");
+							 start();
+						 }
+						 
+						 movedFile.moveTo(moveSuccess, moveFailure, imageLocation.absolutePath+"/fswritetest",true); //move back
+                        
+                     }
+                     var moveFailure =  function(error) { 
+						fail(true, "Moving (overwriting) fswritetest was unsuccessful");
+						start();
+                        
+                     }
+                     
+                     fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest",true); //move now
+				 }
+				 var copyFailure =  function(error) { 
+					 fail(true, "Copying fswritetest was unsuccessful");
+					 start();
+				 }
+				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); //first copy
+
+			}	
+		 }
+		 var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected");
+			start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 
+		 });
+	module('FILE_imp_moveTo_3');
+	test("Files should be moved correctly", function() {		 
+		 var imageLocation = null, documentsLocation = null;
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(location) {
+			expect(2);
+			if (!imageLocation){
+				imageLocation = location;
+			}
+			else if (!documentsLocation){
+				documentsLocation = location;
+		 
+				 var fswritetest = imageLocation.resolve("fswritetest");
+				 ok(fswritetest != null, "fswritetest should not be null.");				
+				 var moveSuccess =  function(movedFile) { 
+					 fail(true, "Moving fswritetest was successful but should not");
+					 start();
+				 }
+				 var moveFailure =  function(error) { 
+                    if (error.code == 10004)
+                        ok(true, "Correct exception was thrown when file was moved");
+                    else
+                        fail(true, "Wrong exception was thrown");
+					 start();
+				 }
+				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath,true); //no filename
+
+			}	
+		 }
+		 var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected");
+			start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 
+		 });
+	module('FILE_imp_copyTo_4');
+	test("Files should be moved correctly", function() {		 
+		 var imageLocation = null, documentsLocation = null;
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(location) {
+		 expect(4);
+			if (!imageLocation){
+				imageLocation = location;
+			}
+			else if (!documentsLocation){
+				documentsLocation = location;
+		 
+				 var fswritetest = imageLocation.resolve("fswritetest");
+				 ok(fswritetest != null, "fswritetest should not be null.");				
+				 var copySuccess =  function(copiedFile) { 
+					 ok(true, "Copying fswritetest was successful");
+	
+                     var moveSuccess =  function(movedFile) { 
+                        fail(true, "Moving fswritetest was successful but should not");
+                        start();
+                     }
+                    var moveFailure =  function(error) { 
+                        if (error.code == 10004)
+                            ok(true, "Correct exception was thrown when file was moved");
+                        else
+                            fail(true, "Wrong exception was thrown");
+                        
+                        ok(copiedFile.deleteFile(), "Copied File was successfully deleted");
+                        start();
+                    }
+				 
+                    fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest",false); //move the same original file
+            
+				 }
+				 var copyFailure =  function(error) { 
+					 fail(true, "Copying fswritetest was unsuccessful");
+					 start();
+				 }
+				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); //copy first
+			}	
+		 }
+		 var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected");
+			start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+
+		 
+		 });
+	module('FILE_imp_moveTo_5');
+	test("Files should be moved correctly", function() {		 
+		 var imageLocation = null, documentsLocation = null;
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(location) {
+			expect(1);
+			if (!imageLocation){
+				imageLocation = location;
+			}
+			else if (!documentsLocation){
+				documentsLocation = location;
+		 
+				 var fswritetest = imageLocation.resolve("fswritetest");
+				 ok(fswritetest != null, "fswritetest should not be null.");				
+				 var moveSuccess =  function(movedFile) { 
+					 fail(true, "Moving fswritetest was successful but should not");
+					 start();
+				 }
+				 var moveFailure =  function(error) { 
+                    if (error.code == 10004)
+                        ok(true, "Correct exception was thrown when file was moved");
+                    else
+                        fail(true, "Wrong exception was thrown");
+					 start();
+				 }
+				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest#",true); //invalid characters
+
+			}	
+		 }
+		 var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected");
+			start(); 
+		 };		 
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
+		 
+		 });
+    //TODO: FILE_imp_moveTo_6
+    module('FILE_imp_moveTo_6');
+	test("Files should be moved correctly from SD card", function() {
+		 expect(1);
+	});
+    module('FILE_imp_READfromFILE');
 	test("Execution of a test cycle (open,read,close)", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
@@ -469,6 +870,7 @@ Tests.prototype.FilesystemTests = function() {
                  var base64 = fs.readBase64(0);
                  ok(typeof base64 == "string", "readBas64 output: "+ base64+ " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
 				 fs.close();
+				 ok(fswritetest.deleteFile(), "file was successfully deleted");
 			 } catch (e){
 				noexception = false;
 			 }
@@ -599,28 +1001,27 @@ Tests.prototype.FilesystemTests = function() {
     test("Testing error cases for creating and deleting directories", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
-			 expect(1);
-			 var exception = false;
+			 expect(2);
+			 var noexception = true;
 			 var fstest = null;
 			 try{
                 fstest = imageLocation.createDirectory("/fstest/fstest"); 
 			 } catch (e){
-                if (e.code == 10004)
-                    exception = true;
+				noexception = false;
 			 }
-			 ok(exception, "createDirectory should throw an exception (IO_ERROR)");
+			 ok(noexception, "createDirectory should not throw an exception (IO_ERROR)");
 
 		     
 			 if (fstest){
 				 var win = function(f) {
-                     ok(true, "directory was successfully deleted");
+                     ok(true, "directories were successfully deleted");
                      start();
 				 }
 				 var fail = function() {
-                     fail(true, "directory was successfully deleted");
+                     fail(true, "directories were successfully deleted");
                      start(); 
 				 };
-				 fstest.deleteDirectory(win,fail,true)
+				 fstest.parent.deleteDirectory(win,fail,true)
 			 }
 			 else
 				start();
@@ -764,7 +1165,7 @@ Tests.prototype.FilesystemTests = function() {
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 	});
     module('FILE_para_getDefaultLocation')
-	test("FileSystemManager.getDefaultLocation should be implemented correctly", function() {
+	test("Testing faulty parameters", function() {
 		 expect(3);
 		 var location;
 		 try{
@@ -782,8 +1183,138 @@ Tests.prototype.FilesystemTests = function() {
 		 location = bondi.filesystem.getDefaultLocation("images");
          }
 		 catch (e){}
-		 ok(typeof location == "string", "images location is a string");
-         
-       
+		 ok(typeof location == "string", "images location is a string");       
      });
-};
+	
+	module('FILE_para_open_1_2')
+	test("Testing faulty parameters", function() {
+	  stop(tests.TEST_TIMEOUT);
+	  var win = function(imageLocation) {
+		  expect(3);
+		  fstest = imageLocation.createFile("fstest");
+		  var noexception = true;
+		  var fs;
+		  try{
+			fs = fstest.open("a","UTF-8"); //legitimate parameters
+			fs.close();
+		  }
+		  catch (e){
+			noexception = false;
+		  }		 
+		  ok(noexception, "open should throw no exception");
+		 
+		  var exception = false;
+		  try{
+			fs = fstest.open("a","xyz-123"); //unsupported encoding
+			fs.close();
+		  }
+		  catch (e){
+		    if (e.code == 10001)
+				exception = true;
+		  }
+		  ok(exception, "open should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 
+		  if (fstest){
+			ok(fstest.deleteFile(), "file was successfully deleted");
+		  }
+		  start();
+	  }
+	  var fail = function() {
+		  expect(1);
+		  ok( false, "successCallback was expected of resolve");
+		  start(); 
+	  };
+	  bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+	  });
+	module('FILE_para_open_3')
+	test("Testing faulty parameters", function() {
+	  stop(tests.TEST_TIMEOUT);
+	  var win = function(imageLocation) {
+		  expect(2);
+		  fstest = imageLocation.createDirectory("fstest");
+	 
+		  var exception = false;
+		  try{
+			var fs = fstest.open("r","UTF-8"); //opening a directory
+			fs.close();
+		  }
+		  catch (e){
+		    if (e.code == 10004)
+				exception = true;
+		  }
+		  ok(exception, "open should throw an exception (IO_ERROR)");
+		 
+		 if (fstest){
+			 var win = function(f) {
+				 ok(true, "directory was successfully deleted");
+				 start();
+			 }
+			 var fail = function() {
+				 fail(true, "directory was successfully deleted");
+				 start(); 
+			 };
+			 fstest.deleteDirectory(win,fail,true)
+		 }
+		 
+		 start();
+	  }
+	  var fail = function() {
+		  expect(1);
+		  ok( false, "successCallback was expected of resolve");
+		  start(); 
+	  };
+	  bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
+	  });
+	module('FILE_para_registerEventListener')
+	test("Testing faulty parameters", function() {
+		 expect(1)
+		 try{
+			bondi.filesystem.registerEventListener("parametertest")
+		 }
+		 catch (e) {
+			ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 }
+		 });
+	module('FILE_para_resolve_1');
+	test("Testing faulty parameters", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(imageLocation) {
+			 expect(1);
+			 fail( true, "errorCallback was expected of resolve");
+			 start();
+		 }
+		 var fail = function(e) {
+			 expect(1);
+			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 start(); 
+		 };
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"/data/resolvetest/resolve");
+		 });
+	module('FILE_para_resolve_2');
+	test("Testing faulty parameters", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(imageLocation) {
+			 expect(1);
+			 fail( true, "errorCallback was expected of resolve");
+			 start();
+		 }
+		 var fail = function(e) {
+			 expect(1);
+			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 start(); 
+		 };
+		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"),"a");
+		 });
+	module('FILE_para_unregisterEventListener')
+	test("Testing faulty parameters", function() {
+		 expect(1)
+		 try{
+			bondi.filesystem.unregisterEventListener("parametertest")
+		 }
+		 catch (e) {
+			ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 }
+		 });
+
+	
+	};

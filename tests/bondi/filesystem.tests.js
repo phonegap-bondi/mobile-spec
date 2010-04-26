@@ -400,10 +400,28 @@ module('FILE_imp_copyTo_1');
 
 	
 	module('FILE_imp_copyTo_6');
-	test("Copying from SDCard", function() {
-		 expect(1)
-        //TODO:FILE_imp_copyTo_6
-		 });
+	test("Copying on read-only files is not permitted", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(file) {
+			expect(1);
+			var success = function(file) {
+				ok(false, "Copying on read-only files is not permitted");
+			}
+			 
+			var failure = function() {
+				ok(true, "Copying on read-only files is not permitted");
+			}
+
+			file.copyTo(success,failure,bondi.filesystem.getDefaultLocation("documents")+"/fscopytest/writeprotect",true);
+		};
+		var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected of resolve");
+		};
+		bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/writeprotect");		
+	});
+
+
 	module('FILE_imp_createDirectoryDeleteDirectory_1');
 	test("Creating and Deleting directories (non-recursive)", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -848,12 +866,30 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 
 		 });
-    //TODO: FILE_imp_moveTo_6
-    module('FILE_imp_moveTo_6');
-	test("Files should be moved correctly from SD card", function() {
-		 expect(1);
+	module('FILE_imp_moveTo_6');
+	test("Moving read-only files is not permitted", function() {
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(file) {
+			 expect(2);
+			 ok(file.readOnly, "file must be read-only");
+			 
+			 var success = function(file) {
+				ok(false, "A read-only file may not be moved");
+			 }
+			 
+			 var failure = function() {
+				ok(true, "A read-only file may not be moved");
+			 }
+
+			file.moveTo(success,failure,bondi.filesystem.getDefaultLocation("documents"),true);
+		 };
+		 var fail = function() {
+			expect(1);
+			ok( false, "successCallback was expected of resolve");
+		 };
+		bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fsmovetest/writeprotect");		
 	});
-    module('FILE_imp_READfromFILE');
+	module('FILE_imp_READfromFILE');
 	test("Execution of a test cycle (open,read,close)", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {

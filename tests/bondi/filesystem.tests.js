@@ -1,4 +1,4 @@
-Tests.prototype.FilesystemTests = function() {	
+Tests.prototype.FilesystemTests = function() {
 	
 	module('FILE_ex_getDefaultLocation');
 	test("FileSystemManager.getDefaultLocation should be implemented", function() {
@@ -206,7 +206,7 @@ Tests.prototype.FilesystemTests = function() {
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
          
-module('FILE_imp_copyTo_1');
+    module('FILE_imp_copyTo_1');
 	test("Files should be copied correctly", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var imageLocation = null, documentsLocation = null;		 
@@ -340,7 +340,7 @@ module('FILE_imp_copyTo_1');
 			 
 				 var fswritetest = imageLocation.resolve("fswritetest");
 				 var copySuccess =  function(copiedFile) {	
-					 start();
+					 //start();
 				 }
 				 var copyFailure =  function(error) { 
 					if (error.code == 10004)
@@ -367,8 +367,7 @@ module('FILE_imp_copyTo_1');
 		 stop(tests.TEST_TIMEOUT);
 		 expect(1)
 		 var imageLocation = null, documentsLocation = null;
-		 var win = function(location) {
-				  		 
+		 var win = function(location) {				  		 
 			 if (!imageLocation)
 				imageLocation = location;
 			 else if (!documentsLocation)
@@ -385,7 +384,7 @@ module('FILE_imp_copyTo_1');
 						ok(true, "Correct exception was thrown");
 					 else
 						fail(true, "Wrong exception was thrown");
-					 start();
+					start();
 				 }
 				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"\0/fswritetest",true);
 			}
@@ -397,7 +396,6 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 });
-	
 	module('FILE_imp_createDirectoryDeleteDirectory_1');
 	test("Creating and Deleting directories (non-recursive)", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -753,7 +751,7 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 
 		 });
-	module('FILE_imp_copyTo_4');
+	module('FILE_imp_moveTo_4');
 	test("Files should be moved correctly", function() {		 
 		 var imageLocation = null, documentsLocation = null;
 		 stop(tests.TEST_TIMEOUT);
@@ -809,7 +807,7 @@ module('FILE_imp_copyTo_1');
 		 var imageLocation = null, documentsLocation = null;
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(location) {
-			expect(1);
+			expect(2);
 			if (!imageLocation){
 				imageLocation = location;
 			}
@@ -842,7 +840,6 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 
 		 });
-
 	module('FILE_imp_READfromFILE');
 	test("Execution of a test cycle (open,read,close)", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -1249,9 +1246,8 @@ module('FILE_imp_copyTo_1');
 				 start(); 
 			 };
 			 fstest.deleteDirectory(win,fail,true)
-		 }
-		 
-		 start();
+		 } else
+			start();
 	  }
 	  var fail = function() {
 		  expect(1);
@@ -1263,13 +1259,12 @@ module('FILE_imp_copyTo_1');
 	module('FILE_para_resolve_1');
 	test("Testing faulty parameters", function() {
 		 stop(tests.TEST_TIMEOUT);
-		 var win = function(imageLocation) {
-			 expect(1);
+		 expect(1);
+		 var win = function(imageLocation) {			 
 			 fail( true, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {
-			 expect(1);
 			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR)");
 			 start(); 
 		 };
@@ -1278,13 +1273,12 @@ module('FILE_imp_copyTo_1');
 	module('FILE_para_resolve_2');
 	test("Testing faulty parameters", function() {
 		 stop(tests.TEST_TIMEOUT);
-		 var win = function(imageLocation) {
-			 expect(1);
+		 expect(1);
+		 var win = function(imageLocation) {			 
 			 fail( true, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {
-			 expect(1);
 			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR)");
 			 start(); 
 		 };

@@ -387,7 +387,7 @@ module('FILE_imp_copyTo_1');
 						fail(true, "Wrong exception was thrown");
 					 start();
 				 }
-				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest#",true);		//TODO: which invalid characters 
+				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"\0/fswritetest",true);
 			}
 		 }
 		 var fail = function() {
@@ -397,31 +397,7 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 });
-
 	
-	module('FILE_imp_copyTo_6');
-	test("Copying on read-only files is not permitted", function() {
-		 stop(tests.TEST_TIMEOUT);
-		 var win = function(file) {
-			expect(1);
-			var success = function(file) {
-				ok(false, "Copying on read-only files is not permitted");
-			}
-			 
-			var failure = function() {
-				ok(true, "Copying on read-only files is not permitted");
-			}
-
-			file.copyTo(success,failure,bondi.filesystem.getDefaultLocation("documents")+"/fscopytest/writeprotect",true);
-		};
-		var fail = function() {
-			expect(1);
-			ok( false, "successCallback was expected of resolve");
-		};
-		bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/writeprotect");		
-	});
-
-
 	module('FILE_imp_createDirectoryDeleteDirectory_1');
 	test("Creating and Deleting directories (non-recursive)", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -853,7 +829,7 @@ module('FILE_imp_copyTo_1');
                         fail(true, "Wrong exception was thrown");
 					 start();
 				 }
-				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest#",true); //invalid characters
+				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswr\0itetest\0",true); //invalid characters
 
 			}	
 		 }
@@ -866,29 +842,7 @@ module('FILE_imp_copyTo_1');
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents"));
 		 
 		 });
-	module('FILE_imp_moveTo_6');
-	test("Moving read-only files is not permitted", function() {
-		 stop(tests.TEST_TIMEOUT);
-		 var win = function(file) {
-			 expect(2);
-			 ok(file.readOnly, "file must be read-only");
-			 
-			 var success = function(file) {
-				ok(false, "A read-only file may not be moved");
-			 }
-			 
-			 var failure = function() {
-				ok(true, "A read-only file may not be moved");
-			 }
 
-			file.moveTo(success,failure,bondi.filesystem.getDefaultLocation("documents"),true);
-		 };
-		 var fail = function() {
-			expect(1);
-			ok( false, "successCallback was expected of resolve");
-		 };
-		bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fsmovetest/writeprotect");		
-	});
 	module('FILE_imp_READfromFILE');
 	test("Execution of a test cycle (open,read,close)", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -897,7 +851,11 @@ module('FILE_imp_copyTo_1');
 			 var noexception = true;
 			 var fswritetest = null;
 			 try{
+				 try{
                  fswritetest = imageLocation.resolve("fswritetest");				 
+				 } catch (e) {
+					fswritetest = imageLocation.createFile("fswritetest");
+				 }
 				 var fs = fswritetest.open("r","UTF-8");
                  var text = fs.read(fswritetest.fileSize);				 	 
 				 ok(typeof text == "string", "read output: "+ text + " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
@@ -1004,7 +962,7 @@ module('FILE_imp_copyTo_1');
 			 var exception = false;
 			 var fstest = null;
 			 try{
-                fstest = imageLocation.createDirectory("fstest:"); //TODO: any name limitations for folders??
+                fstest = imageLocation.createDirectory("fst\0est");
 			 } catch (e){
                 if (e.code == 10004)
                     exception = true;
@@ -1033,7 +991,8 @@ module('FILE_imp_copyTo_1');
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
-    module('FILE_para_createDirectoryDeleteDirectory_3');
+    
+	module('FILE_para_createDirectoryDeleteDirectory_3');
     test("Testing error cases for creating and deleting directories", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
@@ -1150,11 +1109,11 @@ module('FILE_imp_copyTo_1');
 	test("Testing error cases for creating and Deleting files", function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
-			 expect(2);
+			 expect(1);
 			 var exception = false;
 			 var fstest = null;
 			 try{
-                fstest = imageLocation.createFile("fstest:"); //TODO: any illegal characters for file names ?
+                fstest = imageLocation.createFile("fs/test");
 			 } catch (e){
                 if (e.code == 10004)
                     exception = true;
@@ -1172,7 +1131,7 @@ module('FILE_imp_copyTo_1');
              start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
-	});
+	});	
 	module('FILE_para_createFileDeleteFile_3');
 	test("Testing error cases for creating and Deleting files", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -1301,16 +1260,6 @@ module('FILE_imp_copyTo_1');
 	  };
 	  bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 	  });
-	module('FILE_para_registerEventListener')
-	test("Testing faulty parameters", function() {
-		 expect(1)
-		 try{
-			bondi.filesystem.registerEventListener("parametertest")
-		 }
-		 catch (e) {
-			ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
-		 }
-		 });
 	module('FILE_para_resolve_1');
 	test("Testing faulty parameters", function() {
 		 stop(tests.TEST_TIMEOUT);
@@ -1341,16 +1290,29 @@ module('FILE_imp_copyTo_1');
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"),"a");
 		 });
-	module('FILE_para_unregisterEventListener')
+	module('FILE_para_registerEventListener')
 	test("Testing faulty parameters", function() {
-		 expect(1)
-		 try{
-			bondi.filesystem.unregisterEventListener("parametertest")
-		 }
-		 catch (e) {
-			ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 if (typeof bondi.filesystem.registerEventListener != "undefined"){
+			 expect(1)
+			 try{
+				bondi.filesystem.registerEventListener("parametertest")
+			 }
+			 catch (e) {
+				ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 }
 		 }
 		 });
-
-	
+	module('FILE_para_unregisterEventListener')
+	test("Testing faulty parameters", function() {
+		 if (typeof bondi.filesystem.unregisterEventListener != "undefined"){
+			 expect(1)
+			 try{
+				bondi.filesystem.unregisterEventListener("parametertest")
+			 }
+			 catch (e) {
+				ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 }
+		 }
+		 });
+	 
 	};

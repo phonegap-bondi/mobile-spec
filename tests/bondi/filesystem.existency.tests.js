@@ -16,18 +16,8 @@ Tests.prototype.FilesystemExistencyTests = function() {
 		 });
 	test("should contain a bondi.filesystem.resolve function", function() {
 		 expect(2);
-		 ok(typeof bondi.filesystem.resolve != 'undefined' && bondi.filesystem.getRootLocations!= null, "bondi.filesystem.resolve should not be null.");
+		 ok(typeof bondi.filesystem.resolve != 'undefined' && bondi.filesystem.resolve!= null, "bondi.filesystem.resolve should not be null.");
 		 ok(typeof bondi.filesystem.resolve == 'function', "bondi.filesystem.resolve should be a function.");
-		 });
-	test("should contain a bondi.filesystem.registerEventListener function", function() {
-		 expect(2);
-		 ok(typeof bondi.filesystem.registerEventListener != 'undefined' && bondi.filesystem.getRootLocations!= null, "bondi.filesystem.registerEventListener should not be null.");
-		 ok(typeof bondi.filesystem.registerEventListener == 'function', "bondi.filesystem.registerEventListener should be a function.");
-		 });
-	test("should contain a bondi.filesystem.unregisterEventListener function", function() {
-		 expect(2);
-		 ok(typeof bondi.filesystem.unregisterEventListener != 'undefined' && bondi.filesystem.unregisterEventListener!= null, "bondi.filesystem.unregisterEventListener should not be null.");
-		 ok(typeof bondi.filesystem.unregisterEventListener == 'function', "bondi.filesystem.unregisterEventListener should be a function.");
 		 });
 	
     module('File (bondi.filesystem)');

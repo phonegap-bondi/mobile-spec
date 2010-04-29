@@ -25,16 +25,16 @@ Tests.prototype.FilesystemTests = function() {
 				 start();
 				 }
 				 var fail = function() {
-				 fail(true, "directory was successfully deleted");
+				 ok(false, "directory was successfully deleted");
 				 start(); 
 				 };
 				 fstest.deleteDirectory(win,fail,true)
 			 }
 		 }
 		 var fail = function() {
-		 expect(1);
-		 ok( false, "successCallback was expected of resolve");
-		 start(); 
+			 expect(1);
+			 ok( false, "successCallback was expected of resolve");
+			 start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
@@ -230,7 +230,7 @@ Tests.prototype.FilesystemTests = function() {
 				 start();
 			 }
 			 var copyFailure =  function(error) { 
-				 fail(true, "Copying fswritetest was unsuccessful");
+				 ok(false, "Copying fswritetest was unsuccessful");
 				 start();
 			 }
 			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); 
@@ -251,41 +251,41 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var imageLocation = null, documentsLocation = null;		 
 		 var win = function(location) {
-		 expect(8);		  		 
-		 if (!imageLocation)
-		 imageLocation = location;
-		 else if (!documentsLocation){
-		 documentsLocation = location;
-		 
-		 var fswritetest = imageLocation.resolve("fswritetest");
-		 ok(fswritetest != null, "fswritetest should not be null.");
-		 var counter = 0;
-		 var copySuccess =  function(copiedFile) {
-		 counter++;
-		 ok(true, "Copying fswritetest was successful");
-		 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
-		 var correctPath = documentsLocation.absolutePath+"/fswritetest";
-		 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
-		 
-		 if (counter == 2){
-		 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
-		 start();
-		 }
-		 }
-		 var copyFailure =  function(error) { 
-		 fail(true, "Copying fswritetest was unsuccessful");
-		 start();
-		 }
-		 
-		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
-		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);			 
-		 }
+			 expect(8);		  		 
+			 if (!imageLocation)
+				imageLocation = location;
+			 else if (!documentsLocation){
+				documentsLocation = location;
+			 
+			 var fswritetest = imageLocation.resolve("fswritetest");
+			 ok(fswritetest != null, "fswritetest should not be null.");
+			 var counter = 0;
+			 var copySuccess =  function(copiedFile) {
+				 counter++;
+				 ok(true, "Copying fswritetest was successful");
+				 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
+				 var correctPath = documentsLocation.absolutePath+"/fswritetest";
+				 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
+				 
+				 if (counter == 2){
+					 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
+					 start();
+				 }
+			 }
+			 var copyFailure =  function(error) { 
+				 ok(false, "Copying fswritetest was unsuccessful");
+				 start();
+			 }
+			 
+			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
+			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);			 
+			 }
 		 
 		 }
 		 var fail = function() {
-		 expect(1);
-		 ok( false, "successCallback was expected");
-		 start(); 
+			 expect(1);
+			 ok( false, "successCallback was expected");
+			 start(); 
 		 };
 		 
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
@@ -303,14 +303,14 @@ Tests.prototype.FilesystemTests = function() {
 				documentsLocation = location;			 
 				var fswritetest = imageLocation.resolve("fswritetest");
 				var copySuccess =  function(copiedFile) {
-					 fail(true, "Should throw an exception");
+					 ok(false, "Should throw an exception");
 					 start();
 				}
 				var copyFailure =  function(error) { 
 				if (error.code == 10004)
 					 ok(true, "Correct exception was thrown");
 				else
-					 fail(true, "Wrong exception was thrown");
+					 ok(false, "Wrong exception was thrown");
 				start();
 				}				
 				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath,true);		 
@@ -340,13 +340,12 @@ Tests.prototype.FilesystemTests = function() {
 			 
 				 var fswritetest = imageLocation.resolve("fswritetest");
 				 var copySuccess =  function(copiedFile) {	
-					 //start();
 				 }
 				 var copyFailure =  function(error) { 
 					if (error.code == 10004)
 						ok(true, "Correct exception was thrown");
 					else
-						fail(true, "Wrong exception was thrown");
+						ok(false, "Wrong exception was thrown");
 					start();
 				}
 				fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
@@ -376,14 +375,14 @@ Tests.prototype.FilesystemTests = function() {
 			 if (imageLocation && documentsLocation){
 				var fswritetest = imageLocation.resolve("fswritetest");
 				var copySuccess =  function(copiedFile) {
-					 fail(true, "Should not be successful");
+					 ok(false, "Should not be successful");
 					 start();
 				 }
 				 var copyFailure =  function(error) { 
 					 if (error.code == 10004)
 						ok(true, "Correct exception was thrown");
 					 else
-						fail(true, "Wrong exception was thrown");
+						ok(false, "Wrong exception was thrown");
 					start();
 				 }
 				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"\0/fswritetest",true);
@@ -413,14 +412,14 @@ Tests.prototype.FilesystemTests = function() {
 			 
 			 if (fstest){
 				 var win = function(f) {
-					fail(true, "directory was successfully deleted but should not");
+					ok(false, "directory was successfully deleted but should not");
 					start();
 				}
 				var fail = function(error) {
 					if (error.code == 10004)
 						ok(true, "Correct exception was thrown");
 					else
-						fail(true, "Wrong exception was thrown");
+						ok(false, "Wrong exception was thrown");
 					start(); 
 				};
 			 
@@ -455,7 +454,7 @@ Tests.prototype.FilesystemTests = function() {
 					start();
 				}
 				var fail = function(error) {
-					fail(true, "Exception was thrown but should not have");
+					ok(false, "Exception was thrown but should not have");
 					start(); 
 				};
 			 
@@ -483,14 +482,14 @@ Tests.prototype.FilesystemTests = function() {
 			 }
 			 var w = function(f) {
 
-					fail(true, "file was successfully deleted but should not");
+					ok(false, "file was successfully deleted but should not");
 					start();
 			 };
 			 var f = function(error) {
 					if (error.code == 10004)
 						ok(true, "Correct exception was thrown");
 					else
-						fail(true, "Wrong exception was thrown");
+						ok(false, "Wrong exception was thrown");
 					start();
 			};
 			fstestfile.deleteDirectory(w,f,false)
@@ -517,14 +516,14 @@ Tests.prototype.FilesystemTests = function() {
 			 }
 
 			 var w = function(f) {
-					fail(true, "file was successfully deleted but should not");
+					ok(false, "file was successfully deleted but should not");
 					start();
 			 };
 			 var f = function(error) {
 					if (error.code == 10004)
 						ok(true, "Correct exception was thrown");
 					else
-						fail(true, "Wrong exception was thrown");
+						ok(false, "Wrong exception was thrown");
 					start(); 
 			};
 			fstestfile.deleteDirectory(w,f,true)
@@ -630,14 +629,14 @@ Tests.prototype.FilesystemTests = function() {
                         start();
                      }
                      var moveFailure =  function(error) { 
-                        fail(true, "Moving movedFile back was unsuccessful");
+                        ok(false, "Moving movedFile back was unsuccessful");
                         start();
                      }
                      
                      movedFile.moveTo(moveSuccess, moveFailure, imageLocation.absolutePath+"/fswritetest",true); //move back
 				 }
 				 var moveFailure =  function(error) { 
-					 fail(true, "Moving fswritetest was unsuccessful");
+					 ok(false, "Moving fswritetest was unsuccessful");
 					 start();
 				 }
 				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest",true);
@@ -681,7 +680,7 @@ Tests.prototype.FilesystemTests = function() {
 							 start();
 						 }
 						 var moveFailure =  function(error) { 
-							 fail(true, "Moving movedFile back was unsuccessful");
+							 ok(false, "Moving movedFile back was unsuccessful");
 							 start();
 						 }
 						 
@@ -689,7 +688,7 @@ Tests.prototype.FilesystemTests = function() {
                         
                      }
                      var moveFailure =  function(error) { 
-						fail(true, "Moving (overwriting) fswritetest was unsuccessful");
+						ok(false, "Moving (overwriting) fswritetest was unsuccessful");
 						start();
                         
                      }
@@ -697,7 +696,7 @@ Tests.prototype.FilesystemTests = function() {
                      fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswritetest",true); //move now
 				 }
 				 var copyFailure =  function(error) { 
-					 fail(true, "Copying fswritetest was unsuccessful");
+					 ok(false, "Copying fswritetest was unsuccessful");
 					 start();
 				 }
 				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); //first copy
@@ -728,14 +727,14 @@ Tests.prototype.FilesystemTests = function() {
 				 var fswritetest = imageLocation.resolve("fswritetest");
 				 ok(fswritetest != null, "fswritetest should not be null.");				
 				 var moveSuccess =  function(movedFile) { 
-					 fail(true, "Moving fswritetest was successful but should not");
+					 ok(false, "Moving fswritetest was successful but should not");
 					 start();
 				 }
 				 var moveFailure =  function(error) { 
                     if (error.code == 10004)
                         ok(true, "Correct exception was thrown when file was moved");
                     else
-                        fail(true, "Wrong exception was thrown");
+                        ok(false, "Wrong exception was thrown");
 					 start();
 				 }
 				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath,true); //no filename
@@ -769,14 +768,14 @@ Tests.prototype.FilesystemTests = function() {
 					 ok(true, "Copying fswritetest was successful");
 	
                      var moveSuccess =  function(movedFile) { 
-                        fail(true, "Moving fswritetest was successful but should not");
+                        ok(false, "Moving fswritetest was successful but should not");
                         start();
                      }
                     var moveFailure =  function(error) { 
                         if (error.code == 10004)
                             ok(true, "Correct exception was thrown when file was moved");
                         else
-                            fail(true, "Wrong exception was thrown");
+                            ok(false, "Wrong exception was thrown");
                         
                         ok(copiedFile.deleteFile(), "Copied File was successfully deleted");
                         start();
@@ -786,7 +785,7 @@ Tests.prototype.FilesystemTests = function() {
             
 				 }
 				 var copyFailure =  function(error) { 
-					 fail(true, "Copying fswritetest was unsuccessful");
+					 ok(false, "Copying fswritetest was unsuccessful");
 					 start();
 				 }
 				 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true); //copy first
@@ -817,14 +816,14 @@ Tests.prototype.FilesystemTests = function() {
 				 var fswritetest = imageLocation.resolve("fswritetest");
 				 ok(fswritetest != null, "fswritetest should not be null.");				
 				 var moveSuccess =  function(movedFile) { 
-					 fail(true, "Moving fswritetest was successful but should not");
+					 ok(false, "Moving fswritetest was successful but should not");
 					 start();
 				 }
 				 var moveFailure =  function(error) { 
                     if (error.code == 10004)
                         ok(true, "Correct exception was thrown when file was moved");
                     else
-                        fail(true, "Wrong exception was thrown");
+                        ok(false, "Wrong exception was thrown");
 					 start();
 				 }
 				 fswritetest.moveTo(moveSuccess, moveFailure, documentsLocation.absolutePath+"/fswr\0itetest\0",true); //invalid characters
@@ -886,7 +885,7 @@ Tests.prototype.FilesystemTests = function() {
 		 }
 		 var fail = function() {
              expect(1);
-             fail( true, "successCallback was expected of resolve");
+             ok(false, "successCallback was expected of resolve");
              start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
@@ -896,7 +895,7 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
 			 expect(1);
-			 fail( true, "successCallback should not be called");
+			 ok(false, "successCallback should not be called");
 			 start();
 		 }
 		 var fail = function(error) {
@@ -904,7 +903,7 @@ Tests.prototype.FilesystemTests = function() {
 			 if (error.code == 10001)
 				ok(true, "Correct exception was thrown");
 			 else
-				fail(true, "Wrong exception was thrown");
+				ok(false, "Wrong exception was thrown");
 			 start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,null);
@@ -938,7 +937,7 @@ Tests.prototype.FilesystemTests = function() {
                      start();
 				 }
 				 var fail = function() {
-                     fail(true, "directory was successfully deleted");
+                     ok(false, "directory was successfully deleted");
                      start(); 
 				 };
 				 fstest.deleteDirectory(win,fail,true)
@@ -973,7 +972,7 @@ Tests.prototype.FilesystemTests = function() {
                      start();
 				 }
 				 var fail = function() {
-                     fail(true, "directory was successfully deleted");
+                     ok(false, "directory was successfully deleted");
                      start(); 
 				 };
 				 fstest.deleteDirectory(win,fail,true)
@@ -1010,7 +1009,7 @@ Tests.prototype.FilesystemTests = function() {
                      start();
 				 }
 				 var fail = function() {
-                     fail(true, "directories were successfully deleted");
+                     ok(false, "directories were successfully deleted");
                      start(); 
 				 };
 				 fstest.parent.deleteDirectory(win,fail,true)
@@ -1054,7 +1053,7 @@ Tests.prototype.FilesystemTests = function() {
 					 start();
 				 }
 				 var fail = function() {
-					 fail(true, "directory was successfully deleted");
+					 ok(false, "directory was successfully deleted");
 					 start(); 
 				 };
 				 fstest.deleteDirectory(win,fail,true)
@@ -1242,7 +1241,7 @@ Tests.prototype.FilesystemTests = function() {
 				 start();
 			 }
 			 var fail = function() {
-				 fail(true, "directory was successfully deleted");
+				 ok(false, "directory was successfully deleted");
 				 start(); 
 			 };
 			 fstest.deleteDirectory(win,fail,true)
@@ -1261,7 +1260,7 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 expect(1);
 		 var win = function(imageLocation) {			 
-			 fail( true, "errorCallback was expected of resolve");
+			 ok(false, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {
@@ -1275,7 +1274,7 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 expect(1);
 		 var win = function(imageLocation) {			 
-			 fail( true, "errorCallback was expected of resolve");
+			 ok(false, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {

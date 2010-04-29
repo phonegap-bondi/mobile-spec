@@ -25,13 +25,13 @@ Tests.prototype.DeviceTests = function() {
 		}
 		catch(myError)
 		{
-		  fail(true,"A default vocabulary must always be available");
+		  ok(false,"A default vocabulary must always be available");
 		}	
 	
 		try
 		{
 		  bondi.devicestatus.setDefaultVocabulary("bonditest");
-		  fail(true,"One may not set a non-existent vocabulary (NOT_FOUND_ERROR)");
+		  ok(false,"One may not set a non-existent vocabulary (NOT_FOUND_ERROR)");
 		}
 		catch(myError)
 		{
@@ -41,7 +41,7 @@ Tests.prototype.DeviceTests = function() {
 		try
 		{
 		  bondi.devicestatus.setDefaultVocabulary(null);
-		  fail(true,"One may not set a null vocabulary (INVALID_ARGUMENT_ERROR)");
+		  ok(false,"One may not set a null vocabulary (INVALID_ARGUMENT_ERROR)");
 		}
 		catch(myError)
 		{
@@ -51,7 +51,7 @@ Tests.prototype.DeviceTests = function() {
 		try
 		{
 		  bondi.devicestatus.setDefaultVocabulary('');
-		  fail(true,'One may not set an empty string as vocabulary (INVALID_ARGUMENT_ERROR)');
+		  ok(false,'One may not set an empty string as vocabulary (INVALID_ARGUMENT_ERROR)');
 		}
 		catch(myError)
 		{
@@ -62,7 +62,7 @@ Tests.prototype.DeviceTests = function() {
 		{
 		  var undefinedTestVariable;
 		  bondi.devicestatus.setDefaultVocabulary(undefinedTestVariable);
-		  fail(true,'One may not set an undefined variable as vocabulary (INVALID_ARGUMENT_ERROR)');
+		  ok(false,'One may not set an undefined variable as vocabulary (INVALID_ARGUMENT_ERROR)');
 		}
 		catch(myError)
 		{
@@ -84,8 +84,7 @@ Tests.prototype.DeviceTests = function() {
         ok(typeof bondi.devicestatus.getComponents == 'function', "bondi.devicestatus.getComponents should be a function.");
         var value = bondi.devicestatus.listAspects();
 		var components = bondi.devicestatus.getComponents({aspect:value[0]});
-		//Changed from length > 0 to length >= null because there are aspects with zero components as well
-		ok(typeof components != 'undefined' && components.length>=0, "an aspect must always have at least one component");
+		ok(typeof components != 'undefined' && components.length>0, "an aspect must always have at least one component");
 	});
     
     
@@ -121,40 +120,38 @@ Tests.prototype.DeviceTests = function() {
         ok(typeof bondi.devicestatus.watchPropertyChange == 'function', "bondi.devicestatus.watchPropertyChange should be a function.");
 		var numwatchcallleft = 3;
 		stop(tests.TEST_TIMEOUT); 
-		var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"},
-				function onPropertyChange(ref, value) {
-					  numwatchcallleft--;
-					  if (numwatchcallleft==0){
-						  var exception = false;
-						  try {
-							  bondi.devicestatus.clearPropertyChange(batteryChangeHandler);
-						  } catch (e) { 
-							  exception = true; fail(true,"clearing property change watch failed");
-						  }
-						  if (!exception)
-							  ok(numwatchcallleft==0,"clearing property change watch succeeded");
-						  start();
-					  }
-				}, 
-				{maxTimeout:1000,callCallbackOnRegister:true});	
+		var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"},															  
+											  function onPropertyChange(ref, value) {
+											  numwatchcallleft--;
+											  if (numwatchcallleft==0){
+											  var exception = false;
+											  try {
+											  bondi.devicestatus.clearPropertyChange(batteryChangeHandler);
+											  } catch (e) { exception = true; ok(false,"clearing property change watch failed");}
+											  if (!exception)
+											  ok(numwatchcallleft==0,"clearing property change watch succeeded");
+											  start();
+											  }
+												}
+												 , {minTimeout:1000,callCallbackOnRegister:true});		 
 		var exception = false;
 		try
 		{
 			var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevel"}, 
 	                null, {
-	                        maxTimeout:1000,
+	                        minTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
 		}
 		catch(myException)
 		{
-		exception = true;
-		ok(myException.code==10001,"The watch property success callback may not be null (INVALID_ARGUMENT_ERROR)");
+			exception = true;
+			ok(myException.code==10001,"The watch property success callback may not be null (INVALID_ARGUMENT_ERROR)");
 		}			
 	
 		if (!exception)
-			fail(true,"The watch property success callback may not be null (INVALID_ARGUMENT_ERROR)");
+			ok(false,"The watch property success callback may not be null (INVALID_ARGUMENT_ERROR)");
 
 		 
 		 exception = false;
@@ -162,19 +159,19 @@ Tests.prototype.DeviceTests = function() {
 		 {
 		 var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevels"}, 
 					function onPropertyChange(ref, value) {}, {
-	                        maxTimeout:1000,
+	                        minTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
 		 }
 		 catch (myException)
 		 {
-		 exception = true;
-		 ok(myException.code==10001,"Invalid property should throw INVALID_ARGUMENT_ERROR");
+			 exception = true;
+			 ok(myException.code==10001,"Invalid property should throw INVALID_ARGUMENT_ERROR");
 		 }	
 
 		 if (!exception)
-		 fail(true,"Invalid property should throw INVALID_ARGUMENT_ERROR");
+			ok(false,"Invalid property should throw INVALID_ARGUMENT_ERROR");
 		
 	});
 		
@@ -210,7 +207,7 @@ Tests.prototype.DeviceTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {maxTimeout:5000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
     });
     
 	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {

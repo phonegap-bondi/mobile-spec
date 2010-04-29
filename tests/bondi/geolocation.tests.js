@@ -7,9 +7,11 @@ Tests.prototype.GeolocationTests = function() {
 			ok( true, "successCallback was called");
 			start();
 		 };
-		var fail = function() { start(); };
-		var options = {}; options.timeout = 20000; options.maximumAge = 60000;
-		bondi.geolocation.getCurrentPosition(win, fail, options);
+		 var fail = function() {
+			ok( true, "errorCallback was called");
+			start(); 
+		 };
+		 bondi.geolocation.getCurrentPosition(win, fail,{timeout:10000, maximumAge:60000, enableHighAccuracy:false});
 	});
 	module('GEO_ex_watchPosition');
 	var id;
@@ -183,55 +185,50 @@ Tests.prototype.GeolocationTests = function() {
 		 expect(9);
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(p) {
-		 ok(p.timestamp != null && typeof p.timestamp == 'number', "Position object returned in getCurrentPosition success callback has a 'timestamp' property.");	
-		 ok(p.coords != null, "Position object returned in getCurrentPosition success callback has a 'coords' property.");
-		 ok(p.coords.latitude != null && p.coords.latitude >= -90 && p.coords.latitude <= 90, "Coordinates object returned in getCurrentPosition success callback has a 'latitude' property.");
-		 ok(p.coords.longitude != null && p.coords.longitude >= -180 && p.coords.longitude <= 180, "Coordinates object returned in getCurrentPosition success callback has a 'longitude' property.");
-		 ok(p.coords.altitude == null || typeof p.coords.altitude == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'altitude' property.");
-		 ok(p.coords.accuracy != null && typeof p.coords.accuracy == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'accuracy' property.");
-		 ok(p.coords.altitudeAccuracy == null || typeof p.coords.altitudeAccuracy == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'altitudeAccuracy' property.");         
-		 ok(p.coords.heading == null || (p.coords.heading != null && p.coords.heading >= 0 && p.coords.heading<=360), "Coordinates object returned in getCurrentPosition success callback has a 'heading' property.");
-		 ok(p.coords.speed == null || typeof p.coords.speed == 'number' , "Coordinates object returned in getCurrentPosition success callback has a 'speed' property.");				 
-		 start();
+			 ok(p.timestamp != null && typeof p.timestamp == 'number', "Position object returned in getCurrentPosition success callback has a 'timestamp' property.");	
+			 ok(p.coords != null, "Position object returned in getCurrentPosition success callback has a 'coords' property.");
+			 ok(p.coords.latitude != null && p.coords.latitude >= -90 && p.coords.latitude <= 90, "Coordinates object returned in getCurrentPosition success callback has a 'latitude' property.");
+			 ok(p.coords.longitude != null && p.coords.longitude >= -180 && p.coords.longitude <= 180, "Coordinates object returned in getCurrentPosition success callback has a 'longitude' property.");
+			 ok(p.coords.altitude == null || typeof p.coords.altitude == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'altitude' property.");
+			 ok(p.coords.accuracy != null && typeof p.coords.accuracy == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'accuracy' property.");
+			 ok(p.coords.altitudeAccuracy == null || typeof p.coords.altitudeAccuracy == 'number', "Coordinates object returned in getCurrentPosition success callback has a 'altitudeAccuracy' property.");         
+			 ok(p.coords.heading == null || (p.coords.heading != null && p.coords.heading >= 0 && p.coords.heading<=360), "Coordinates object returned in getCurrentPosition success callback has a 'heading' property.");
+			 ok(p.coords.speed == null || typeof p.coords.speed == 'number' , "Coordinates object returned in getCurrentPosition success callback has a 'speed' property.");				 
+			 start();
 		 };
 		 var fail = function() {
-		 ok( false, "successCallback was expected");
-		 start(); 
+			 ok( false, "successCallback was expected");
+			 start(); 
 		 };
 		 bondi.geolocation.watchPosition(win, fail,{timeout:60000, maximumAge:120000, enableHighAccuracy:false});
 	});
 	module('GEO_imp_getCurrentPosition_2');
 	test("Geolocation.getCurrentPosition errorCallback should be called when there is no reception", function() {
-		 if (window.confirm("The following test (GEO_imp_getCurrentPosition_2) will ONLY run successfully with no reception. Press OK to confirm you have no reception"))
-		 {
-			 expect(1);
-			 stop(tests.TEST_TIMEOUT);
-			 var win = function(p) {
-			 ok( false, "should call errorCallback when there is no reception");
+		 expect(1);
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(p) {
+			 ok( true, "successCallback was called because there is reception, test was not run properly");
 			 start();
-			 };
-			 var fail = function(e) {
+		 };
+		 var fail = function(e) {
 			 ok( e.code >=1 && e.code <=3 && typeof e.message != 'undefined', "should call errorCallback when there is no reception");
 			 start(); 
-			 };
-			 bondi.geolocation.getCurrentPosition(win, fail,{timeout:60000, maximumAge:120000, enableHighAccuracy:false});
-		 }
+		 };
+		 bondi.geolocation.getCurrentPosition(win, fail,{timeout:60000, maximumAge:120000, enableHighAccuracy:false});
 	});
 	module('GEO_imp_watchPosition_2');
 	test("Geolocation.watchPosition errorCallback should be called when there is no reception", function() {
-		 if (window.confirm("The following test (GEO_imp_watchPosition_2) will ONLY run successfully with no reception. Press OK to confirm you have no reception"))
-		 {
-			 expect(1);
-			 stop(tests.TEST_TIMEOUT);
-			 var win = function(p) {
-				ok( false, "should call errorCallback when there is no reception");
-				start();
-			 };
-			 var fail = function(e) {
-				ok( e.code >=1 && e.code <=3 && typeof e.message != 'undefined', "should call errorCallback when there is no reception");
-				start(); 
-			 };
-			 bondi.geolocation.watchPosition(win, fail,{timeout:60000, maximumAge:120000, enableHighAccuracy:false});
-		 }
+		 expect(1);
+		 stop(tests.TEST_TIMEOUT);
+		 var win = function(p) {
+			ok( true, "successCallback was called because there is reception, test was not run properly");
+			start();
+		 };
+		 var fail = function(e) {
+			ok( e.code >=1 && e.code <=3 && typeof e.message != 'undefined', "should call errorCallback when there is no reception");
+			start(); 
+		 };
+		 bondi.geolocation.watchPosition(win, fail,{timeout:60000, maximumAge:120000, enableHighAccuracy:false});
+		 
 	});
 	};

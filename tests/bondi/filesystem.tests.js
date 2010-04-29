@@ -32,9 +32,9 @@ Tests.prototype.FilesystemTests = function() {
 			 }
 		 }
 		 var fail = function() {
-			 expect(1);
-			 ok( false, "successCallback was expected of resolve");
-			 start(); 
+		 expect(1);
+		 ok( false, "successCallback was expected of resolve");
+		 start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 		 });
@@ -96,6 +96,7 @@ Tests.prototype.FilesystemTests = function() {
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
 	});
+	
 	module('FILE_ex_FileAttr');
 	test("Plausability of file attributes", function() {
 		
@@ -251,41 +252,41 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var imageLocation = null, documentsLocation = null;		 
 		 var win = function(location) {
-			 expect(8);		  		 
-			 if (!imageLocation)
-				imageLocation = location;
-			 else if (!documentsLocation){
-				documentsLocation = location;
-			 
-			 var fswritetest = imageLocation.resolve("fswritetest");
-			 ok(fswritetest != null, "fswritetest should not be null.");
-			 var counter = 0;
-			 var copySuccess =  function(copiedFile) {
-				 counter++;
-				 ok(true, "Copying fswritetest was successful");
-				 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
-				 var correctPath = documentsLocation.absolutePath+"/fswritetest";
-				 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
-				 
-				 if (counter == 2){
-					 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
-					 start();
-				 }
-			 }
-			 var copyFailure =  function(error) { 
-				 ok(false, "Copying fswritetest was unsuccessful");
-				 start();
-			 }
-			 
-			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
-			 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);			 
-			 }
+		 expect(8);		  		 
+		 if (!imageLocation)
+		 imageLocation = location;
+		 else if (!documentsLocation){
+		 documentsLocation = location;
+		 
+		 var fswritetest = imageLocation.resolve("fswritetest");
+		 ok(fswritetest != null, "fswritetest should not be null.");
+		 var counter = 0;
+		 var copySuccess =  function(copiedFile) {
+		 counter++;
+		 ok(true, "Copying fswritetest was successful");
+		 ok(typeof copiedFile == 'object', "copiedFile should be of type 'object'.");
+		 var correctPath = documentsLocation.absolutePath+"/fswritetest";
+		 ok(copiedFile.absolutePath != null && copiedFile.absolutePath == correctPath, "copiedFile should be at correct path: " + copiedFile.absolutePath);
+		 
+		 if (counter == 2){
+		 ok(copiedFile.deleteFile(), "copiedFile was successfully deleted");
+		 start();
+		 }
+		 }
+		 var copyFailure =  function(error) { 
+		 ok(false, "Copying fswritetest was unsuccessful");
+		 start();
+		 }
+		 
+		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",false);
+		 fswritetest.copyTo(copySuccess, copyFailure, documentsLocation.absolutePath+"/fswritetest",true);			 
+		 }
 		 
 		 }
 		 var fail = function() {
-			 expect(1);
-			 ok( false, "successCallback was expected");
-			 start(); 
+		 expect(1);
+		 ok( false, "successCallback was expected");
+		 start(); 
 		 };
 		 
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
@@ -340,6 +341,7 @@ Tests.prototype.FilesystemTests = function() {
 			 
 				 var fswritetest = imageLocation.resolve("fswritetest");
 				 var copySuccess =  function(copiedFile) {	
+					 //start();
 				 }
 				 var copyFailure =  function(error) { 
 					if (error.code == 10004)
@@ -515,7 +517,7 @@ Tests.prototype.FilesystemTests = function() {
 				fstestfile = imageLocation.resolve("fstest.txt");
 			 }
 
-			 var w = function(f) {
+			 var w = function(farg) {
 					ok(false, "file was successfully deleted but should not");
 					start();
 			 };
@@ -848,20 +850,22 @@ Tests.prototype.FilesystemTests = function() {
 			 var fswritetest = null;
 			 try{
 				 try{
-                 fswritetest = imageLocation.resolve("fswritetest");				 
+					 fswritetest = imageLocation.resolve("fswritetest");				 
 				 } catch (e) {
 					fswritetest = imageLocation.createFile("fswritetest");
 				 }
 				 var fs = fswritetest.open("r","UTF-8");
-                 var text = fs.read(fswritetest.fileSize);				 	 
+				 // read test has to be restricted to the first 10 chars because the write test fills the rest of the file with non-unicode base64 characters that will cause an exception
+                 var text = fs.read(10); //fswritetest.fileSize
 				 ok(typeof text == "string", "read output: "+ text + " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
-                 var raw = fs.readBytes(0);
-                 ok(raw.length > 0, "readBytes output: "+ raw.join(" ") + " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
-                 var base64 = fs.readBase64(0);
-                 ok(typeof base64 == "string", "readBas64 output: "+ base64+ " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
+				 var raw = fs.readBytes(0);
+				 ok(raw.length > 0, "readBytes output: "+ raw.join(" ") + " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
+				 var base64 = fs.readBase64(0);
+				 ok(typeof base64 == "string", "readBas64 output: "+ base64+ " bytesAvailable: "+fs.bytesAvailable + " position: "+fs.position + " eof: "+fs.eof)
 				 fs.close();
 				 ok(fswritetest.deleteFile(), "file was successfully deleted");
 			 } catch (e){
+				 alert(e.message);
 				noexception = false;
 			 }
 			 ok(noexception, "test cycle should throw no exception");
@@ -885,7 +889,7 @@ Tests.prototype.FilesystemTests = function() {
 		 }
 		 var fail = function() {
              expect(1);
-             ok(false, "successCallback was expected of resolve");
+             fail( true, "successCallback was expected of resolve");
              start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images"));
@@ -895,7 +899,7 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 var win = function(imageLocation) {
 			 expect(1);
-			 ok(false, "successCallback should not be called");
+			 fail( true, "successCallback should not be called");
 			 start();
 		 }
 		 var fail = function(error) {
@@ -1168,8 +1172,12 @@ Tests.prototype.FilesystemTests = function() {
          try{
              location = bondi.filesystem.getDefaultLocation("images","size");
 		 }
-		 catch (e){}
-		 ok(typeof location == "string", "images location is a string");
+		 catch (e){
+			 // inserted new test cause possible copy paste error during testcase writing
+			 ok (e.code == 10001, "Exception was thrown correctly (INVALID_ARGUMENT_ERROR)");
+		 }
+		 // seems to be a copy and paste error. 
+		 //ok(typeof location == "string", "images location is a string");
          try{
 		 location = bondi.filesystem.getDefaultLocation("images");
          }
@@ -1260,11 +1268,11 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 expect(1);
 		 var win = function(imageLocation) {			 
-			 ok(false, "errorCallback was expected of resolve");
+			 fail( true, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {
-			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 ok(e.code==10001, "resolve should throw an exception (INVALID_ARGUMENT_ERROR) e=" + e.code);
 			 start(); 
 		 };
 		 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"/data/resolvetest/resolve");
@@ -1274,7 +1282,7 @@ Tests.prototype.FilesystemTests = function() {
 		 stop(tests.TEST_TIMEOUT);
 		 expect(1);
 		 var win = function(imageLocation) {			 
-			 ok(false, "errorCallback was expected of resolve");
+			 fail( true, "errorCallback was expected of resolve");
 			 start();
 		 }
 		 var fail = function(e) {

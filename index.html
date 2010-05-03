@@ -47,18 +47,20 @@
 
 			if (typeof bondi.filesystem == "undefined") bondi.filesystem = new FileSystemManager();
 
-			var exception = false;
-			try {
-				var sdCard = bondi.filesystem.getDefaultLocation("sdcard");
-			} catch(e) {
-				exception = true;
-			}
-
-			if (sdCard == null || exception){
-				tests.CameraTests = 'undefined';
-				tests.CameraExistencyTests = 'undefined';
-				tests.FilesystemExistencyTests = 'undefined';
-				tests.FilesystemTests = 'undefined';
+			if (navigator.userAgent.indexOf('Android') > -1 ) {
+				var exception = false;
+				try {
+					var sdCard = bondi.filesystem.getDefaultLocation("sdcard");
+				} catch(e) {
+					exception = true;
+				}
+	
+				if (sdCard == null || exception){
+					tests.CameraTests = 'undefined';
+					tests.CameraExistencyTests = 'undefined';
+					tests.FilesystemExistencyTests = 'undefined';
+					tests.FilesystemTests = 'undefined';
+				}
 			}
 
 

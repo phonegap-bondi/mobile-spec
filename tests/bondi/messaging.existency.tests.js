@@ -1,4 +1,4 @@
-Tests.prototype.MessagingTests = function() {	
+Tests.prototype.MessagingExistencyTests = function() {	
 	module('Messaging (bondi.messaging)');
 	test("should exist", function() {
   		expect(1);

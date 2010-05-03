@@ -1,4 +1,4 @@
-Tests.prototype.Messaging2Tests = function() {	
+Tests.prototype.MessagingTests = function() {	
 	
 	test("should exist", function() {
   		expect(1);

@@ -1173,13 +1173,10 @@ Tests.prototype.FilesystemTests = function() {
              location = bondi.filesystem.getDefaultLocation("images","size");
 		 }
 		 catch (e){
-			 // inserted new test cause possible copy paste error during testcase writing
 			 ok (e.code == 10001, "Exception was thrown correctly (INVALID_ARGUMENT_ERROR)");
 		 }
-		 // seems to be a copy and paste error. 
-		 //ok(typeof location == "string", "images location is a string");
          try{
-		 location = bondi.filesystem.getDefaultLocation("images");
+			location = bondi.filesystem.getDefaultLocation("images");
          }
 		 catch (e){}
 		 ok(typeof location == "string", "images location is a string");       

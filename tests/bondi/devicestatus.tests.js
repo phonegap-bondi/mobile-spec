@@ -84,7 +84,7 @@ Tests.prototype.DeviceTests = function() {
         ok(typeof bondi.devicestatus.getComponents == 'function', "bondi.devicestatus.getComponents should be a function.");
         var value = bondi.devicestatus.listAspects();
 		var components = bondi.devicestatus.getComponents({aspect:value[0]});
-		ok(typeof components != 'undefined' && components.length>0, "an aspect must always have at least one component");
+		ok(typeof components != 'undefined' && components.length>=0, "an aspect must always have at least one component");
 	});
     
     

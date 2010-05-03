@@ -20,7 +20,8 @@
 		function run() {
 			window.confirm('Start test run');
 			for (var t in tests) {
-				if (t.indexOf('Tests') > -1) {
+				if (t.indexOf('Tests') > -1 && tests[t] != 'undefined') {
+					alert(t + '::');
 					tests[t]();
 				}
 			} 
@@ -73,10 +74,8 @@
 			}
 
 			if (ownNumber == null){
-				tests.FilesystemExistencyTests = 'undefined';
-				tests.FilesystemTests = 'undefined';
-				tests.GeolocationExistencyTests = 'undefined';
-				tests.GeolocationTests = 'undefined';
+				tests.MessagingExistencyTests = 'undefined';
+				tests.MessagingTests = 'undefined';
 			}
 			
 

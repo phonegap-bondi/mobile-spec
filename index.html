@@ -13,9 +13,12 @@
 			this.TEST_TIMEOUT = 15000;
 		};
 		var tests = new Tests();
-		
+
+		var sdCardPresent = false;
+
 		// Runs each function in Tests that contains 'Tests' in the name.
 		function run() {
+			window.confirm('Start test run');
 			for (var t in tests) {
 				if (t.indexOf('Tests') > -1) {
 					tests[t]();
@@ -23,28 +26,85 @@
 			} 
 		}
 		function loadTests() {
+
+			if (typeof bondi == 'undefined'){
+				bondi = new Bondi();
+			}
+
+			var featureList = bondi.getFeatures();
+			var messageImplemented = false;
+			for (var i = 0; i < featureList.length; i++){
+				var feature = featureList[i];
+				if ((feature == "http://bondi.omtp.org/api/1.1/messaging.sms.send") ||
+						(feature == "http://bondi.omtp.org/api/1.1/messaging.sms.subscribe")){
+					messageImplemented = true;
+				}
+			}
+			if (!messageImplemented){
+				tests.MessagingExistencyTests = 'undefined';
+				tests.MessagingTests = 'undefined';
+			}
+
+			if (typeof bondi.filesystem == "undefined") bondi.filesystem = new FileSystemManager();
+
+			var exception = false;
+			try {
+				var sdCard = bondi.filesystem.getDefaultLocation("sdcard");
+			} catch(e) {
+				exception = true;
+			}
+
+			if (sdCard == null || exception){
+				tests.CameraTests = 'undefined';
+				tests.CameraExistencyTests = 'undefined';
+				tests.FilesystemExistencyTests = 'undefined';
+				tests.FilesystemTests = 'undefined';
+			}
+
+
+			var ownNumber = null;
+			if (typeof mMessageHandler != 'undefined'){
+				// we are probably operating on android
+				try {
+				ownNumber = mMessageHandler.getOwnNumber();
+				} catch(e) {
+					ownNumber = null;
+				}
+			}
+
+			if (ownNumber == null){
+				tests.FilesystemExistencyTests = 'undefined';
+				tests.FilesystemTests = 'undefined';
+				tests.GeolocationExistencyTests = 'undefined';
+				tests.GeolocationTests = 'undefined';
+			}
+			
+
 			// Shitty hack here: check for BlackBerry browser and timeout the test runner, or simply attach test runner
 			// to the deviceready event if we have any other platform that can handle events.
 			if (navigator.userAgent.indexOf('Browzr') > -1) {
-				setTimeout(run, 250);
+				setTimeout(run(), 250);
 			} else {
-				document.addEventListener('deviceready', run, false);
+				document.addEventListener('deviceready', run(), false);
 			}
 		}
-	</script>	
+		
+	</script>
+	<script type="text/javascript" src="tests/bondi/messaging.existency.tests.js"></script>
+	<script type="text/javascript" src="tests/bondi/messaging.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/bondi.existency.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/bondi.tests.js"></script>
+	<script type="text/javascript" src="tests/bondi/camera.existency.tests.js"></script>	
+	<script type="text/javascript" src="tests/bondi/camera.tests.js"></script>	
 	<script type="text/javascript" src="tests/bondi/devicestatus.existency.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/devicestatus.tests.js"></script>
-    <script type="text/javascript" src="tests/bondi/filesystem.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/filesystem.existency.tests.js"></script>	
-	<script type="text/javascript" src="tests/bondi/camera.existency.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/camera.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/geolocation.existency.tests.js"></script>	
+	<script type="text/javascript" src="tests/bondi/filesystem.tests.js"></script>	
+	<script type="text/javascript" src="tests/bondi/geolocation.existency.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/geolocation.tests.js"></script>
-	<!--
-	<script type="text/javascript" src="tests/bondi/devicestatus.tests.js"></script>
-	<script type="text/javascript" src="tests/phonegap/accelerometer.tests.js"></script>	
+
+	
+	<!-- script type="text/javascript" src="tests/phonegap/accelerometer.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/contacts.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/camera.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/device.tests.js"></script>
@@ -55,12 +115,14 @@
 	<script type="text/javascript" src="tests/phonegap/notification.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/orientation.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/sms.tests.js"></script>
-	<script type="text/javascript" src="tests/phonegap/telephony.tests.js"></script>-->
+	<script type="text/javascript" src="tests/phonegap/telephony.tests.js"></script-->
 	</head>
 	<body onload="loadTests();">
 		<h1 id="qunit-header">Mobile Spec (PhoneGap) Tests</h1>
 		<h2 id="qunit-banner"></h2>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
+		
+    	<!-- a href="#" class="btn large" onclick="loadTests();">Load Tests</a-->
 	</body>
 </html>

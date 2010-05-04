@@ -133,13 +133,13 @@ Tests.prototype.DeviceTests = function() {
 											  start();
 											  }
 												}
-												 , {minTimeout:1000,callCallbackOnRegister:true});		 
+												 , {maxTimeout:1000,callCallbackOnRegister:true});		 
 		var exception = false;
 		try
 		{
 			var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevel"}, 
 	                null, {
-	                        minTimeout:1000,
+	                        maxTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
@@ -159,7 +159,7 @@ Tests.prototype.DeviceTests = function() {
 		 {
 		 var batteryChangeHandler = bondi.devicestatus.watchPropertyChange({aspect:"battery", property:"batterylevels"}, 
 					function onPropertyChange(ref, value) {}, {
-	                        minTimeout:1000,
+	                        maxTimeout:1000,
 	                        callCallbackOnRegister:true
 	                }
 	        );
@@ -207,7 +207,7 @@ Tests.prototype.DeviceTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {maxTimeout:5000});
     });
     
 	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {

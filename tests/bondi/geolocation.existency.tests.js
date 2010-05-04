@@ -15,45 +15,57 @@ Tests.prototype.GeolocationExistencyTests = function() {
 		ok(typeof bondi.geolocation.watchPosition == 'function', "bondi.geolocation.watchPosition should be a function.");
 	});
 	test("getCurrentPosition success callback should be called with a Position object", function() {
-		expect(9);
-		stop(tests.TEST_TIMEOUT);
-		var win = function(p) {
-			ok(p.coords != null, "Position object returned in getCurrentPosition success callback has a 'coords' property.");
-            ok(p.coords.latitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'latitude' property.");
-            ok(p.coords.longitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'longitude' property.");
-            ok(p.coords.altitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'altitude' property.");
-            ok(p.coords.accuracy != null, "Coordinates object returned in getCurrentPosition success callback has a 'accuracy' property.");
-			//altitudeAccuracy must be null if it cannot be provided
-			ok(typeof p.coords.altitudeAccuracy != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'altitudeAccuracy' property.");         
-			ok(typeof p.coords.heading != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'heading' property.");
-            ok(typeof p.coords.speed != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'speed' property.");
-			ok(p.timestamp != null, "Position object returned in getCurrentPosition success callback has a 'timestamp' property.");
-			start();
-		};
-		var fail = function() { start(); };
-		var options
-		bondi.geolocation.getCurrentPosition(win, fail);
+		if (gpsAvailable){
+			expect(9);
+			stop(tests.TEST_TIMEOUT);
+			var win = function(p) {
+				ok(p.coords != null, "Position object returned in getCurrentPosition success callback has a 'coords' property.");
+				ok(p.coords.latitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'latitude' property.");
+				ok(p.coords.longitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'longitude' property.");
+				ok(p.coords.altitude != null, "Coordinates object returned in getCurrentPosition success callback has a 'altitude' property.");
+				ok(p.coords.accuracy != null, "Coordinates object returned in getCurrentPosition success callback has a 'accuracy' property.");
+				//altitudeAccuracy must be null if it cannot be provided
+				ok(typeof p.coords.altitudeAccuracy != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'altitudeAccuracy' property.");         
+				ok(typeof p.coords.heading != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'heading' property.");
+				ok(typeof p.coords.speed != 'undefined', "Coordinates object returned in getCurrentPosition success callback has a 'speed' property.");
+				ok(p.timestamp != null, "Position object returned in getCurrentPosition success callback has a 'timestamp' property.");
+				start();
+			};
+			var fail = function() { start(); };
+			var options
+			bondi.geolocation.getCurrentPosition(win, fail);
+		 } else {
+			ok(true, "test was not executed due to unsuccessful pre-test");
+		 }
 	});
     var watchID;
     test("watchPosition success callback should be called", function() {
-		expect(2);
-		stop(tests.TEST_TIMEOUT);
-		var win = function(p) {
-			ok(p.coords != null, "Position object returned in watchPosition success callback has a 'coords' property.");
-			ok(p.timestamp != null, "Position object returned in watchPosition success callback has a 'timestamp' property.");
-			start();
-		};
-		var fail = function() { start(); };
-		watchID = bondi.geolocation.watchPosition(win, fail);
+		if (gpsAvailable){
+			expect(2);
+			stop(tests.TEST_TIMEOUT);
+			var win = function(p) {
+				ok(p.coords != null, "Position object returned in watchPosition success callback has a 'coords' property.");
+				ok(p.timestamp != null, "Position object returned in watchPosition success callback has a 'timestamp' property.");
+				start();
+			};
+			var fail = function() { start(); };
+			watchID = bondi.geolocation.watchPosition(win, fail);
+		 } else {
+			ok(true, "test was not executed due to unsuccessful pre-test");
+		 }
 	});
 	test("clearWatch should stop watchPosition success callback",function () {
-		 expect(1);
-		 try {
-			bondi.geolocation.clearWatch(watchID);
-		 } catch(error) {
-			ok( false, "bondi.geolocation.clearWatch should be able to stop location updates.");
-		 }
-		 ok( true, "bondi.geolocation.clearWatch should be able to stop location updates.");
+		 if (gpsAvailable){
+			 expect(1);
+			 try {
+				bondi.geolocation.clearWatch(watchID);
+			 } catch(error) {
+				ok( false, "bondi.geolocation.clearWatch should be able to stop location updates.");
+			 }
+			 ok( true, "bondi.geolocation.clearWatch should be able to stop location updates.");
+		 } else {
+			ok(true, "test was not executed due to unsuccessful pre-test");
+		 } 
 	});
 	module('Geolocation model');
 	test("should be able to define a Position object with coords and timestamp properties", function() {

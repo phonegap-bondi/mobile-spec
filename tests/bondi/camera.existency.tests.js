@@ -13,7 +13,7 @@ Tests.prototype.CameraExistencyTests = function() {
     test("should be able to instantiate a Camera object with properties", function () {        
         stop(tests.TEST_TIMEOUT);
         var win = function(cameras) {
-			expect(25);
+			  expect(22);
             var camera = cameras[0];
             ok(camera != null, "new Camera object should not be null.");
             ok(typeof camera == 'object', "new Camera object should be of type 'object'.");
@@ -38,10 +38,7 @@ Tests.prototype.CameraExistencyTests = function() {
             ok(typeof camera.takePicture == 'function', "takePicture should be a function.");
             ok(typeof camera.getSupportedFeatures == 'function', "getSupportedFeatures should be a function.");
             ok(typeof camera.setFeature == 'function', "setFeature should be a function.");
-            ok(typeof camera.requestLiveVideo == 'function', "requestLiveVideo should be a function.");
-            ok(typeof camera.beginRecording == 'function', "beginRecording should be a function.");
-            ok(typeof camera.endRecording == 'function', "endRecording should be a function.");
-            
+           
             start();
         };
         var fail = function() { start(); };

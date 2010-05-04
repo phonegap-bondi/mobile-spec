@@ -1290,26 +1290,22 @@ Tests.prototype.FilesystemTests = function() {
 		 });
 	module('FILE_para_registerEventListener')
 	test("Testing faulty parameters", function() {
-		 if (typeof bondi.filesystem.registerEventListener != "undefined"){
-			 expect(1)
-			 try{
-				bondi.filesystem.registerEventListener("parametertest")
-			 }
-			 catch (e) {
-				ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
-			 }
+		 expect(1)
+		 try{
+			bondi.filesystem.registerEventListener("parametertest")
+		 }
+		 catch (e) {
+			ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
 		 }
 		 });
 	module('FILE_para_unregisterEventListener')
 	test("Testing faulty parameters", function() {
-		 if (typeof bondi.filesystem.unregisterEventListener != "undefined"){
-			 expect(1)
-			 try{
-				bondi.filesystem.unregisterEventListener("parametertest")
-			 }
-			 catch (e) {
-				ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
-			 }
+		 expect(1)
+		 try{
+			bondi.filesystem.unregisterEventListener("parametertest")
+		 }
+		 catch (e) {
+			ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
 		 }
 		 });
 	 

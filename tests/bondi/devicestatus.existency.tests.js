@@ -2,8 +2,7 @@ Tests.prototype.DeviceExistencyTests = function() {
 	module('DeviceStatusManager (bondi.devicestatus)');
 	test("should exist", function() {
   		expect(1);
- 		bondi.requestFeature(ok(bondi.devicestatus != null, "bondi.devicestatus should not be null."),nop{}(), "http://bondi.omtp.org/api/1.1/devicestatus");
-  		//ok(bondi.devicestatus != null, "bondi.devicestatus should not be null.");
+		bondi.requestFeature(ok(bondi.devicestatus != null, "bondi.devicestatus should not be null."),function(){}, "http://bondi.omtp.org/api/1.1/devicestatus");
 	});
     test("should contain a listVocabularies function", function() {
         expect(2);

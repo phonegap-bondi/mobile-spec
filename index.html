@@ -15,6 +15,8 @@
 		var tests = new Tests();
 
 		var sdCardPresent = false;
+		var gpsAvailable = false; //global var used to decide which geolocation tests to run
+		var keinStartmehr= false;
 		
 		// Runs each function in Tests that contains 'Tests' in the name.
 		function run() {
@@ -26,41 +28,12 @@
 				}
 			} 
 		}
-		
-		function onPositionError(error) {
-			tests.GeolocationTests = 'undefined';				
-			tests.GeolocationExistencyTests = 'undefined';
-			run();
-		}
-		function onPositionSuccess (position) {			
-			tests.GeolocationNoGPSTests = 'undefined';				
-			tests.GeolocationNoGPSExistencyTests = 'undefined';
-			run();
-		}
-		
+
 		function loadTests() {
 
 			if (typeof bondi == 'undefined'){
 				bondi = new Bondi();
-			}
-			
-			//GPS pre-Test
-			/*if (typeof bondi.geolocation == "undefined")  bondi.geolocation= new BONDIGeolocation();
-
-
-			bondi.geolocation.getCurrentPosition(onPositionSuccess, onPositionError,{timeout:15000});*/
-			
-			
-			if (window.confirm("Is GPS available")){
-				tests.GeolocationNoGPSTests = 'undefined';				
-				tests.GeolocationNoGPSExistencyTests = 'undefined';
-			}else{
-				tests.GeolocationTests = 'undefined';				
-				tests.GeolocationExistencyTests = 'undefined';
-			}
-			
-			
-			
+			}		
 
 			var featureList = bondi.getFeatures();
 			var messageImplemented = false;
@@ -124,21 +97,19 @@
 		
 	</script>
 	
+	<script type="text/javascript" src="tests/bondi/pre.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/messaging.existency.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/messaging.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/bondi.existency.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/bondi.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/camera.existency.tests.js"></script>	
-	<script type="text/javascript" src="tests/bondi/camera.tests.js"></script>	
+	<script type="text/javascript" src="tests/bondi/camera.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/devicestatus.existency.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/devicestatus.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/filesystem.cleanup.tests.js"></script>
+	<script type="text/javascript" src="tests/bondi/devicestatus.tests.js"></script>	
 	<script type="text/javascript" src="tests/bondi/filesystem.existency.tests.js"></script>	
 	<script type="text/javascript" src="tests/bondi/filesystem.tests.js"></script>
 	<script type="text/javascript" src="tests/bondi/geolocation.existency.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/geolocation.tests.js"></script>	
-	<script type="text/javascript" src="tests/bondi/geolocation_no_gps.existency.tests.js"></script>
-	<script type="text/javascript" src="tests/bondi/geolocation_no_gps.tests.js"></script>
+	<script type="text/javascript" src="tests/bondi/geolocation.tests.js"></script>
 
 	<!-- <script type="text/javascript" src="tests/phonegap/accelerometer.tests.js"></script>
 	<script type="text/javascript" src="tests/phonegap/contacts.tests.js"></script>

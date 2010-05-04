@@ -2,7 +2,8 @@ Tests.prototype.DeviceExistencyTests = function() {
 	module('DeviceStatusManager (bondi.devicestatus)');
 	test("should exist", function() {
   		expect(1);
-  		ok(bondi.devicestatus != null, "bondi.devicestatus should not be null.");
+ 		bondi.requestFeature(ok(bondi.devicestatus != null, "bondi.devicestatus should not be null."),nop{}(), "http://bondi.omtp.org/api/1.1/devicestatus");
+  		//ok(bondi.devicestatus != null, "bondi.devicestatus should not be null.");
 	});
     test("should contain a listVocabularies function", function() {
         expect(2);
@@ -74,7 +75,7 @@ Tests.prototype.DeviceExistencyTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {maxTimeout:5000});
     });
 	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {
 		 expect(1);

@@ -3,6 +3,10 @@ Tests.prototype.MessagingTests = function() {
 	test("should exist", function() {
   		expect(1);
   		ok(bondi != null, "bondi should not be null.");
+  		if (bondi!=null)
+  		{
+  			bondi.requestFeature(nop(){},nop(){}, "http://bondi.omtp.org/api/1.1/messaging");  			
+  		}
 	});
 	test("should contain a requestFeature function", function() {
 		expect(2);
@@ -111,7 +115,7 @@ Tests.prototype.MessagingTests = function() {
 		var sms = bondi.messaging.createSMS({body:"Just arrived",to:["+491711234567"]});
 		try {
 			var errorCallback = function(e) {
-				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+				ok(e.code == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 //				start(); 
 				};
 			bondi.messaging.sendSMS(null, errorCallback, sms, false); 
@@ -130,7 +134,7 @@ Tests.prototype.MessagingTests = function() {
 				};
 			bondi.messaging.sendSMS(successCallback, null, sms, false); 
 		} catch (e) {
-			ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+			ok(e.code == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 		}
 	});
 
@@ -142,7 +146,7 @@ Tests.prototype.MessagingTests = function() {
 //				start(); 
 				};
 			var errorCallback = function(e) {
-				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+				ok(e.code == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 //				start();
 				};
 			bondi.messaging.sendSMS(successCallback, errorCallback, null, false); 
@@ -160,7 +164,7 @@ Tests.prototype.MessagingTests = function() {
 //				start();
 				};
 			var errorCallback = function(e) {
-				ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+				ok(e.code == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 //				start(); 
 				};
 			bondi.messaging.sendSMS(successCallback, errorCallback, sms, null); 
@@ -176,7 +180,7 @@ Tests.prototype.MessagingTests = function() {
 		var successCallback = function(response) {
 			};
 		var errorCallback = function(error) {
-			ok(error.name == error.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+			ok(error.code == error.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 			};
 		var smslistener = function(text) {
 			//alert('sms received. text=' + text);
@@ -194,7 +198,7 @@ Tests.prototype.MessagingTests = function() {
 		try {
 			var pe = bondi.messaging.subscribeToSMS(successCallback, null, sms, true);
 		} catch (e) {
-			ok(e.name == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
+			ok(e.code == e.INVALID_ARGUMENT_ERROR, "an INVALID_ARGUMENT_ERROR was expected.");
 		}
 		
 		// test description: MESS_para_subscribeToSMS_2.doc

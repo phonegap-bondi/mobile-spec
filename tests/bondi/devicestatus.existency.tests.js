@@ -76,7 +76,7 @@ Tests.prototype.DeviceExistencyTests = function() {
 			start();
 		};
 		var fail = function() { start(); };
-		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {minTimeout:5000});
+		watchID = bondi.devicestatus.watchPropertyChange({aspect:"Battery", property:"batteryLevel"}, win, {maxTimeout:5000});
     });
 	test("clearPropertyChange should stop watchPropertyChange success callbacks", function () {
 		 expect(1);

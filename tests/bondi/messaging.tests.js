@@ -1,11 +1,11 @@
 Tests.prototype.MessagingTests = function() {	
 	
 	test("should exist", function() {
-  		expect(1);
+  		expect(2);
   		ok(bondi != null, "bondi should not be null.");
   		if (bondi!=null)
   		{
-  			bondi.requestFeature(nop(){},nop(){}, "http://bondi.omtp.org/api/1.1/messaging");  			
+  			bondi.requestFeature(ok(bondi.messaging != null, "bondi.messaging should not be null"),function nop(){}, "http://bondi.omtp.org/api/1.1/messaging");  			
   		}
 	});
 	test("should contain a requestFeature function", function() {

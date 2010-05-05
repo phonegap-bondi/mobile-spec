@@ -2,7 +2,13 @@ Tests.prototype.MessagingExistencyTests = function() {
 	module('Messaging (bondi.messaging)');
 	test("should exist", function() {
   		expect(1);
-  		bondi.requestFeature(ok(bondi.messaging != null, "bondi.messaging should not be null."),nop{}(), "http://bondi.omtp.org/api/1.1/messaging");
+  		var s = function() {
+  			ok(bondi.messaging != null, "bondi.messaging should not be null.");
+  		};
+  		var f = function() {
+  			alert("bondi.requestFeature failed");
+  		};
+  		bondi.requestFeature(s,f, "http://bondi.omtp.org/api/1.1/messaging");
 	});
 	test("should contain a createSMS function", function() {
 		expect(2);

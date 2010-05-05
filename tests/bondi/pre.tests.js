@@ -5,9 +5,10 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteDirectory(ok(true, "/fstest in default location of 'images' successfully deleted"),
-										   ok(false,"/fstest in default location of 'images' could not be deleted, please check"),true);	   
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "/fstest in default location of 'images' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -22,9 +23,10 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteFile(ok(true, "/fstest in default location of 'images' successfully deleted"),
-									  ok(false,"/fstest in default location of 'images' could not be deleted, please check"),true);	   
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "/fstest in default location of 'images' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -44,9 +46,10 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteFile(ok(true, "/fswritetest in default location of 'images' successfully deleted"),
-									  ok(false,"/fswritetest in default location of 'images' could not be deleted, please check"),true);	   
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "/fswritetest in default location of 'images' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -62,9 +65,10 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteFile(ok(true, "/fswritetest in default location of 'documents' successfully deleted"),
-									  ok(false,"/fswritetest in default location of 'documents' could not be deleted, please check"),true);	   
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "/fswritetest in default location of 'documents' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -79,26 +83,31 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteFile(ok(true, "\0/fswritetest in default location of 'documents' successfully deleted"),
-									  ok(false,"\0/fswritetest in default location of 'documents' could not be deleted, please check"),true);	   
+				 expect(1);
+				 try {
+					 imageLocation.deleteFile();
+				 } catch (e) {
+				 }
+				 ok(true, "/fswritetest in default location of 'documents' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
-			 expect(1);
-			 ok( true, "\0/fswritetest in default location of 'documents' non-existent as expected");
-			 start(); 
+				 expect(1);
+				 ok( true, "\0/fswritetest in default location of 'documents' non-existent as expected");
+				 start(); 
 			 };
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"\0/fswritetest");	
-			 });
+		});
 		
 		test("Preparing a clean file i/o test environment - Check 6", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
-			 expect(1);
-			 imageLocation.deleteFile(ok(true, "//fswr\0itetest\0 in default location of 'documents' successfully deleted"),
-									  ok(false,"//fswr\0itetest\0 in default location of 'documents' could not be deleted, please check"),true);	   
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "//fswr\0itetest\0 in default location of 'documents' successfully deleted");
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -165,7 +174,7 @@ Tests.prototype.CleanUpTests = function() {
 				start(); 
 			}
 		 };
-		 var options = {}; options.timeout = 15000; //will fail before qunit timeout
+		 var options = {}; options.timeout = 5000; //will fail before qunit timeout
 		 bondi.geolocation.getCurrentPosition(win, fail, options);
 		 });
 	

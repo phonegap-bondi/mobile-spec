@@ -40,8 +40,8 @@ Tests.prototype.BondiTests = function() {
 		{
 			var found=false;
 			for (j=0; j<featurelist.length; j++)
-			{
-				if (featureArray[i] == featurelist[j])
+			{				
+				if (featurelist[j].match("^"+featureArray[i])==featureArray[i])				
 				{
 					found=true;
 				}

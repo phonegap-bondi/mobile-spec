@@ -1,4 +1,5 @@
 Tests.prototype.CameraTests = function() {	
+	
 	module('CAM_ex_imp_getCameras');
 	test("CameraManager.getCameras should exist", function() {
 		 expect(1);
@@ -61,46 +62,6 @@ Tests.prototype.CameraTests = function() {
 		 };
 		 bondi.camera.getCameras(win, fail);
 		 });
-	module('CAM_ex_takePicture');
-	test("Camera.takePicture should exist", function() {
-		 expect(1);
-		 stop(tests.TEST_TIMEOUT);
-		 var win = function(cameras) { 
-			 var noexception = true;
-			 try {
-				cameras[0].takePicture(function (p){},function(e){},{});
-			 } catch (e) {noexception = false;}
-			 ok (noexception, "No Exception is thrown");
-			 
-			 start();
-		 };
-		 var fail = function() {
-			 ok( false, "errorCallback was called");
-			 start(); 
-		 };
-		 bondi.camera.getCameras(win, fail);
-		 });
-	module('CAM_imp_takePicture');
-	test("Camera.takePicture should work", function() {
-		 expect(1);
-		 stop(tests.TEST_TIMEOUT);
-		 var win = function(cameras) {		 
-			 var win = function(file) {
-				 ok(file != null, "file path to picture should be returned: " + file);
-				 start();
-			 };
-			 var fail = function() {
-				 ok( false, "errorCallback was called by takePicture");
-				 start(); 
-			};
-			cameras[0].takePicture(win,fail,{});		 
-		 };
-		 var fail = function() {
-			ok( false, "errorCallback was called");
-			start();
-		 };
-		 bondi.camera.getCameras(win, fail);
-	});
 	module('CAM_para_getCameras');
 	test("CameraManager.getCameras should handle faulty parameters", function() {
 		 expect(1);

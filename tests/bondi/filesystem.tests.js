@@ -1,4 +1,5 @@
 Tests.prototype.FilesystemTests = function() {
+	bondi.requestFeature(function () {}, function () {}, "http://bondi.omtp.org/api/1.1/filesystem.read");
 	
 	module('FILE_ex_getDefaultLocation');
 	test("FileSystemManager.getDefaultLocation should be implemented", function() {
@@ -865,7 +866,7 @@ Tests.prototype.FilesystemTests = function() {
 				 fs.close();
 				 ok(fswritetest.deleteFile(), "file was successfully deleted");
 			 } catch (e){
-				 alert(e.message);
+				 //alert(e.message);
 				noexception = false;
 			 }
 			 ok(noexception, "test cycle should throw no exception");
@@ -1290,22 +1291,26 @@ Tests.prototype.FilesystemTests = function() {
 		 });
 	module('FILE_para_registerEventListener')
 	test("Testing faulty parameters", function() {
-		 expect(1)
-		 try{
-			bondi.filesystem.registerEventListener("parametertest")
-		 }
-		 catch (e) {
-			ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 if (typeof bondi.filesystem.registerEventListener != "undefined"){
+			 expect(1)
+			 try{
+				bondi.filesystem.registerEventListener("parametertest")
+			 }
+			 catch (e) {
+				ok(e.code==10001, "registerEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 }
 		 }
 		 });
 	module('FILE_para_unregisterEventListener')
 	test("Testing faulty parameters", function() {
-		 expect(1)
-		 try{
-			bondi.filesystem.unregisterEventListener("parametertest")
-		 }
-		 catch (e) {
-			ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+		 if (typeof bondi.filesystem.unregisterEventListener != "undefined"){
+			 expect(1)
+			 try{
+				bondi.filesystem.unregisterEventListener("parametertest")
+			 }
+			 catch (e) {
+				ok(e.code==10001, "unregisterEventListener should throw an exception (INVALID_ARGUMENT_ERROR)");
+			 }
 		 }
 		 });
 	 

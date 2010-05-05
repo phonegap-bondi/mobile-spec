@@ -87,6 +87,7 @@ Tests.prototype.CleanUpTests = function() {
 				 try {
 					 imageLocation.deleteFile();
 				 } catch (e) {
+					 alert("Check 5 delete ex: " + e.message);
 				 }
 				 ok(true, "/fswritetest in default location of 'documents' successfully deleted");
 				 start();
@@ -97,7 +98,7 @@ Tests.prototype.CleanUpTests = function() {
 				 ok( true, "\0/fswritetest in default location of 'documents' non-existent as expected");
 				 start(); 
 			 };
-			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"\0/fswritetest");	
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fswritetest");	
 		});
 		
 		test("Preparing a clean file i/o test environment - Check 6", function() {

@@ -168,14 +168,11 @@ Tests.prototype.CleanUpTests = function() {
 			 start();
 		 };
 		 var fail = function() {		 
-			 
-			if (!keinStartmehr){
-				keinStartmehr = true;
-				ok( true, "no position was acquired"); 
-				start(); 
-			}
+			ok( true, "no position was acquired"); 
+			start(); 
+			
 		 };
-		 var options = {}; options.timeout = 5000; //will fail before qunit timeout
+		 var options = {}; options.timeout = 20000;
 		 bondi.geolocation.getCurrentPosition(win, fail, options);
 		 });
 	

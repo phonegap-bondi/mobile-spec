@@ -1,7 +1,32 @@
 Tests.prototype.CleanUpTests = function() {
-		module('Pre-Processing');
+	module('Pre-Processing');
 
 		test("Preparing a clean file i/o test environment - Check 1", function() {
+			 
+			 stop(tests.TEST_TIMEOUT);
+			 var win = function(imageLocation) {
+				 expect(1);
+				 var innerwin=function(){
+					ok(true,"directory fstest in default location of 'images' successfully deleted"); 
+				 };
+				 
+				 var innerfail=function(){
+					ok(false,"diretory fstest in default location of 'images' could not be deleted, please check"); 
+				 }
+				 
+				 imageLocation.deleteDirectory(innerwin, innerfail, true);
+				 start();
+			 };
+			 
+			 var fail = function() {
+			 expect(1);
+			 ok( true, "/fstest in default location of 'images' non-existent as expected");
+			 start(); 
+			 };
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fstest");	
+			 });
+		
+		test("Preparing a clean file i/o test environment - Check 2", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -18,10 +43,9 @@ Tests.prototype.CleanUpTests = function() {
 			 };
 			 
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fstest");	
-			 });		
+			 });
 		
-		
-		test("Preparing a clean file i/o test environment - Check 2", function() {
+		test("Preparing a clean file i/o test environment - Check 3", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -39,8 +63,28 @@ Tests.prototype.CleanUpTests = function() {
 			 
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fswritetest");	
 			 });
+
+		test("Preparing a clean file i/o test environment - Check 4", function() {
+			 
+			 stop(tests.TEST_TIMEOUT);
+			 var win = function(imageLocation) {
+				 expect(1);
+				 imageLocation.deleteFile();
+				 ok(true, "/fstest.txt in default location of 'images' successfully deleted");
+				 start();
+			 };
+			 
+			 var fail = function() {
+			 expect(1);
+			 ok( true, "/fstest.txt in default location of 'images' non-existent as expected");
+			 start(); 
+			 };
+			 
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fstest.txt");	
+			 });
 		
-		test("Preparing a clean file i/o test environment - Check 3", function() {
+		
+		test("Preparing a clean file i/o test environment - Check 5", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -58,7 +102,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"fswritetest");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 4", function() {
+		test("Preparing a clean file i/o test environment - Check 6", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -66,7 +110,6 @@ Tests.prototype.CleanUpTests = function() {
 				 try {
 					 imageLocation.deleteFile();
 				 } catch (e) {
-					 alert("Check 5 delete ex: " + e.message);
 				 }
 				 ok(true, "/fswritetest in default location of 'documents' successfully deleted");
 				 start();
@@ -77,10 +120,10 @@ Tests.prototype.CleanUpTests = function() {
 				 ok( true, "\0/fswritetest in default location of 'documents' non-existent as expected");
 				 start(); 
 			 };
-			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fswritetest");	
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"\0/fswritetest");	
 		});
 		
-		test("Preparing a clean file i/o test environment - Check 5", function() {
+		test("Preparing a clean file i/o test environment - Check 7", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -99,7 +142,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fswr\0itetest\0");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 6", function() {
+		test("Preparing a clean file i/o test environment - Check 8", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -114,16 +157,24 @@ Tests.prototype.CleanUpTests = function() {
 			 start(); 
 			 };
 			 
-			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fst\0est");	
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fs/test");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 7", function() {
+		test("Preparing a clean file i/o test environment - Check 9", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
 			 expect(1);
-			 imageLocation.deleteDirectory(ok(true, "/data/resolvetest/resolve in default location of 'images' successfully deleted"),
-										   ok(false,"/data/resolvetest/resolve in default location of 'images' could not be deleted, please check"),true);	   
+			 var innerwin=function(){
+					ok(true,"directory data in default location of 'images' successfully deleted"); 
+				 };
+				 
+				 var innerfail=function(){
+					ok(false,"diretory data in default location of 'images' could not be deleted, please check"); 
+				 }
+				 
+				 imageLocation.deleteDirectory(innerwin, innerfail, true);
+				 start();
 			 };
 			 
 			 var fail = function() {
@@ -132,7 +183,7 @@ Tests.prototype.CleanUpTests = function() {
 			 start(); 
 			 };
 			 
-			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"data/resolvetest/resolve");	
+			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"data");	
 			 });
 	
 
@@ -146,10 +197,9 @@ Tests.prototype.CleanUpTests = function() {
 			 gpsAvailable = true;
 			 start();
 		 };
-		 var fail = function() {		 
+		 var fail = function() {			 
 			ok( true, "no position was acquired"); 
-			start(); 
-			
+            start(); 
 		 };
 		 var options = {}; options.timeout = 20000;
 		 bondi.geolocation.getCurrentPosition(win, fail, options);

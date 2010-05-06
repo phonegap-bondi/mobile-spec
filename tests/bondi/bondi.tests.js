@@ -35,9 +35,10 @@ Tests.prototype.BondiTests = function() {
 		featureArray[2]="http://bondi.omtp.org/api/1.1/camera.access";
 		featureArray[3]="http://bondi.omtp.org/api/1.1/camera.capture";
 		featureArray[4]="http://bondi.omtp.org/api/1.1/geolocation.position";
+        featureArray[5]="http://bondi.omtp.org/api/1.1/devicestatus";
 		if (messageImplemented){
-		 featureArray[5]="http://bondi.omtp.org/api/1.1/messaging.sms.send";
-		 featureArray[6]="http://bondi.omtp.org/api/1.1/messaging.sms.subscribe";
+		 featureArray[6]="http://bondi.omtp.org/api/1.1/messaging.sms.send";
+		 featureArray[7]="http://bondi.omtp.org/api/1.1/messaging.sms.subscribe";
 		} 
 		for (i = 0; i < featureArray.length; i++)
 		{

@@ -204,6 +204,4 @@ Tests.prototype.CleanUpTests = function() {
 		 var options = {}; options.timeout = 20000;
 		 bondi.geolocation.getCurrentPosition(win, fail, options);
 		 });
-	
-	
 };

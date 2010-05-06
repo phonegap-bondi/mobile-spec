@@ -23,7 +23,6 @@ Tests.prototype.BondiTests = function() {
 
 	
 	test("should contain a getFeatures function", function() {
-		expect(7);
 		ok(typeof bondi.getFeatures != 'undefined' && bondi.getFeatures != null, "bondi.getFeatures should not be null.");
 		ok(typeof bondi.getFeatures == 'function', "bondi.getFeatures should be a function.");
 
@@ -31,11 +30,15 @@ Tests.prototype.BondiTests = function() {
 		ok(typeof featurelist != 'undefined' && featurelist != null && featurelist.length>=0, "bondi.getFeatures should return a featurelist.");
 		
 		var featureArray=new Array();
-		featureArray[0]="http://bondi.omtp.org/api/1.1/filesystem";
-		featureArray[1]="http://bondi.omtp.org/api/1.1/devicestatus";
-		featureArray[2]="http://bondi.omtp.org/api/1.1/geolocation";
-		featureArray[3]="http://bondi.omtp.org/api/1.1/camera";
-		
+		featureArray[0]="http://bondi.omtp.org/api/1.1/filesystem.read";
+		featureArray[1]="http://bondi.omtp.org/api/1.1/filesystem.write";
+		featureArray[2]="http://bondi.omtp.org/api/1.1/camera.access";
+		featureArray[3]="http://bondi.omtp.org/api/1.1/camera.capture";
+		featureArray[4]="http://bondi.omtp.org/api/1.1/geolocation.position";
+		if (messageImplemented){
+		 featureArray[5]="http://bondi.omtp.org/api/1.1/messaging.sms.send";
+		 featureArray[6]="http://bondi.omtp.org/api/1.1/messaging.sms.subscribe";
+		} 
 		for (i = 0; i < featureArray.length; i++)
 		{
 			var found=false;

@@ -1,5 +1,5 @@
 Tests.prototype.CleanUpTests = function() {
-	module('Pre-Processing');
+		module('Pre-Processing');
 
 		test("Preparing a clean file i/o test environment - Check 1", function() {
 			 
@@ -16,33 +16,12 @@ Tests.prototype.CleanUpTests = function() {
 			 ok( true, "/fstest in default location of 'images' non-existent as expected");
 			 start(); 
 			 };
+			 
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fstest");	
-			 });
+			 });		
+		
 		
 		test("Preparing a clean file i/o test environment - Check 2", function() {
-			 
-			 stop(tests.TEST_TIMEOUT);
-			 var win = function(imageLocation) {
-				 expect(1);
-				 imageLocation.deleteFile();
-				 ok(true, "/fstest in default location of 'images' successfully deleted");
-				 start();
-			 };
-			 
-			 var fail = function() {
-			 expect(1);
-			 ok( true, "/fstest in default location of 'images' non-existent as expected");
-			 start(); 
-			 };
-			 
-			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fstest");	
-			 });
-		
-		
-		
-		
-		
-		test("Preparing a clean file i/o test environment - Check 3", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -61,7 +40,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fswritetest");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 4", function() {
+		test("Preparing a clean file i/o test environment - Check 3", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -79,7 +58,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"fswritetest");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 5", function() {
+		test("Preparing a clean file i/o test environment - Check 4", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -101,7 +80,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fswritetest");	
 		});
 		
-		test("Preparing a clean file i/o test environment - Check 6", function() {
+		test("Preparing a clean file i/o test environment - Check 5", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -120,7 +99,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("documents")+"/fswr\0itetest\0");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 7", function() {
+		test("Preparing a clean file i/o test environment - Check 6", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {
@@ -138,7 +117,7 @@ Tests.prototype.CleanUpTests = function() {
 			 bondi.filesystem.resolve(win,fail,bondi.filesystem.getDefaultLocation("images")+"fst\0est");	
 			 });
 		
-		test("Preparing a clean file i/o test environment - Check 8", function() {
+		test("Preparing a clean file i/o test environment - Check 7", function() {
 			 
 			 stop(tests.TEST_TIMEOUT);
 			 var win = function(imageLocation) {

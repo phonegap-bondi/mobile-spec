@@ -14,7 +14,7 @@
 		};
 		var tests = new Tests();
 
-		var sdCardPresent = false;
+		var messageImplemented = false;
 		var gpsAvailable = false; //global var used to decide which geolocation tests to run
 		
 		// Runs each function in Tests that contains 'Tests' in the name.
@@ -35,7 +35,6 @@
 			}		
 
 			var featureList = bondi.getFeatures();
-			var messageImplemented = false;
 			for (var i = 0; i < featureList.length; i++){
 				var feature = featureList[i];
 				if ((feature == "http://bondi.omtp.org/api/1.1/messaging.sms.send") ||
